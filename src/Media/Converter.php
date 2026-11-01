@@ -31,19 +31,19 @@ final class Converter {
 	public function convert( string $source, string $ext, string $dest ) {
 		$ext = strtolower( $ext );
 		if ( ! in_array( $ext, array( 'stl', 'obj' ), true ) ) {
-			return $this->error( 'not_convertible', __( 'Only STL and OBJ files are converted.', 'embed-3d-models' ) );
+			return $this->error( 'not_convertible', __( 'Only STL and OBJ files are converted.', 'pratiks-3d-model-embedder' ) );
 		}
 
 		$in = Stream::open( $source, 'rb' );
 		if ( null === $in ) {
-			return $this->error( 'unreadable', __( 'The model file could not be read.', 'embed-3d-models' ) );
+			return $this->error( 'unreadable', __( 'The model file could not be read.', 'pratiks-3d-model-embedder' ) );
 		}
 
-		$temp = wp_tempnam( 'embed-3d-models' );
+		$temp = wp_tempnam( 'pratiks-3d-model-embedder' );
 		$out  = '' !== $temp ? Stream::open( $temp, 'wb' ) : null;
 		if ( null === $out ) {
 			Stream::close( $in );
-			return $this->error( 'no_temp', __( 'Could not write a temporary file for the conversion.', 'embed-3d-models' ) );
+			return $this->error( 'no_temp', __( 'Could not write a temporary file for the conversion.', 'pratiks-3d-model-embedder' ) );
 		}
 
 		$writer = new MeshWriter( $out, 'z' === $this->up_axis( $ext ), $this->scale( $ext ) );
@@ -60,11 +60,11 @@ final class Converter {
 
 		if ( ! $mesh['ok'] ) {
 			wp_delete_file( $temp );
-			return $this->error( 'write_failed', __( 'Could not write the converted model. The disk may be full.', 'embed-3d-models' ) );
+			return $this->error( 'write_failed', __( 'Could not write the converted model. The disk may be full.', 'pratiks-3d-model-embedder' ) );
 		}
 		if ( $mesh['vertices'] < 3 ) {
 			wp_delete_file( $temp );
-			return $this->error( 'no_triangles', __( 'No triangles were found in this model, so there is nothing to show.', 'embed-3d-models' ) );
+			return $this->error( 'no_triangles', __( 'No triangles were found in this model, so there is nothing to show.', 'pratiks-3d-model-embedder' ) );
 		}
 
 		$bytes = $mesh['vertices'] * MeshWriter::STRIDE;
@@ -72,7 +72,7 @@ final class Converter {
 		wp_delete_file( $temp );
 		if ( ! $ok ) {
 			wp_delete_file( $dest );
-			return $this->error( 'write_failed', __( 'Could not write the converted model. The disk may be full.', 'embed-3d-models' ) );
+			return $this->error( 'write_failed', __( 'Could not write the converted model. The disk may be full.', 'pratiks-3d-model-embedder' ) );
 		}
 
 		return array(
@@ -263,7 +263,7 @@ final class Converter {
 		return array(
 			'asset'       => array(
 				'version'   => '2.0',
-				'generator' => 'Embed 3D Models',
+				'generator' => 'Pratiks 3D Model Embedder',
 			),
 			'scene'       => 0,
 			'scenes'      => array( array( 'nodes' => array( 0 ) ) ),
@@ -340,7 +340,7 @@ final class Converter {
 		 * @param float  $scale Scale factor.
 		 * @param string $ext   Source format, stl or obj.
 		 */
-		$scale = (float) apply_filters( 'embed_3d_models_conversion_scale', $default, $ext );
+		$scale = (float) apply_filters( 'pratiks_3d_model_embedder_conversion_scale', $default, $ext );
 
 		return is_finite( $scale ) && $scale > 0 ? $scale : $default;
 	}
@@ -360,7 +360,7 @@ final class Converter {
 		 * @param string $axis "y" or "z".
 		 * @param string $ext  Source format, stl or obj.
 		 */
-		$axis = apply_filters( 'embed_3d_models_conversion_up_axis', $default, $ext );
+		$axis = apply_filters( 'pratiks_3d_model_embedder_conversion_up_axis', $default, $ext );
 
 		return in_array( $axis, array( 'y', 'z' ), true ) ? $axis : $default;
 	}
@@ -379,7 +379,7 @@ final class Converter {
 		 *
 		 * @param float[] $color Red, green, blue, alpha.
 		 */
-		$color = (array) apply_filters( 'embed_3d_models_conversion_color', $default );
+		$color = (array) apply_filters( 'pratiks_3d_model_embedder_conversion_color', $default );
 		if ( 4 !== count( $color ) ) {
 			return $default;
 		}
@@ -399,6 +399,6 @@ final class Converter {
 	 * @param string $message Default message.
 	 */
 	private function error( string $key, string $message ): \WP_Error {
-		return new \WP_Error( 'embed_3d_models_' . $key, Formats::message( $key, $message ) );
+		return new \WP_Error( 'pratiks_3d_model_embedder_' . $key, Formats::message( $key, $message ) );
 	}
 }

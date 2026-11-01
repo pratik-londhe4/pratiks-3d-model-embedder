@@ -32,7 +32,7 @@ test( 'demo: upload an STL into the block, set alt text and a poster, see it on 
 			await demo.click( page.getByRole( 'button', { name: 'Close Block Inserter' } ).or( page.getByRole( 'button', { name: /Block Inserter|Add block/ } ).first() ).first(), 600 );
 
 			// Upload an STL: it is converted to GLB on the server.
-			const placeholder = canvas.locator( '.wp-block-embed-3d-models-model .components-placeholder' );
+			const placeholder = canvas.locator( '.wp-block-pratiks-3d-model-embedder-model .components-placeholder' );
 			await expect( placeholder ).toBeVisible();
 			const chooser = page.waitForEvent( 'filechooser' );
 			await demo.click( placeholder.getByRole( 'button', { name: 'Upload' } ), 200 );

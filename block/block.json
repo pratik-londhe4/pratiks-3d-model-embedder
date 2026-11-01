@@ -1,12 +1,12 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "embed-3d-models/model",
+	"name": "pratiks-3d-model-embedder/model",
 	"title": "3D Model",
 	"category": "media",
 	"description": "Show an interactive 3D model (GLB, glTF, STL or OBJ) that visitors can rotate.",
 	"keywords": [ "3d", "glb", "gltf", "stl", "obj", "model", "ar" ],
-	"textdomain": "embed-3d-models",
+	"textdomain": "pratiks-3d-model-embedder",
 	"attributes": {
 		"id": { "type": "number" },
 		"src": { "type": "string", "default": "" },
@@ -35,7 +35,7 @@
 		"html": false,
 		"spacing": { "margin": true }
 	},
-	"editorScript": "embed-3d-models-editor",
-	"viewScript": "embed-3d-models-view",
-	"style": "embed-3d-models"
+	"editorScript": "pratiks-3d-model-embedder-editor",
+	"viewScript": "pratiks-3d-model-embedder-view",
+	"style": "pratiks-3d-model-embedder"
 }

@@ -4,7 +4,7 @@
 services:
   wp:
     volumes:
-      - ../../../dist/embed-3d-models:/var/www/html/wp-content/plugins/embed-3d-models:ro
+      - ../../../dist/pratiks-3d-model-embedder:/var/www/html/wp-content/plugins/pratiks-3d-model-embedder:ro
   cli:
     volumes:
-      - ../../../dist/embed-3d-models:/var/www/html/wp-content/plugins/embed-3d-models:ro
+      - ../../../dist/pratiks-3d-model-embedder:/var/www/html/wp-content/plugins/pratiks-3d-model-embedder:ro

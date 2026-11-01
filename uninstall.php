@@ -1,9 +1,9 @@
 <?php
 /**
- * Removes everything Embed 3D Models stored. Runs when the plugin is deleted from wp-admin.
+ * Removes everything Pratiks 3D Model Embedder stored. Runs when the plugin is deleted from wp-admin.
  *
  * The plugin stores no options. It adds GLB files converted from STL and OBJ
- * uploads, and an `embed_3d_models` entry in each model's attachment
+ * uploads, and an `pratiks_3d_model_embedder` entry in each model's attachment
  * metadata; both are removed here. The uploaded models themselves, and any
  * poster images, are the site's media and stay.
  *
@@ -15,7 +15,7 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 /**
  * Removes the plugin's files and metadata on the current site.
  */
-function embed_3d_models_uninstall_site(): void {
+function pratiks_3d_model_embedder_uninstall_site(): void {
 	$page = 1;
 	do {
 		$ids = get_posts(
@@ -34,11 +34,11 @@ function embed_3d_models_uninstall_site(): void {
 
 		foreach ( $ids as $id ) {
 			$metadata = get_post_meta( (int) $id, '_wp_attachment_metadata', true );
-			if ( ! is_array( $metadata ) || ! isset( $metadata['embed_3d_models'] ) ) {
+			if ( ! is_array( $metadata ) || ! isset( $metadata['pratiks_3d_model_embedder'] ) ) {
 				continue;
 			}
 
-			$name = (string) ( $metadata['embed_3d_models']['glb'] ?? '' );
+			$name = (string) ( $metadata['pratiks_3d_model_embedder']['glb'] ?? '' );
 			$file = (string) get_attached_file( (int) $id );
 			if ( '' !== $name && '' !== $file ) {
 				$path = trailingslashit( dirname( $file ) ) . wp_basename( $name );
@@ -47,7 +47,7 @@ function embed_3d_models_uninstall_site(): void {
 				}
 			}
 
-			unset( $metadata['embed_3d_models'] );
+			unset( $metadata['pratiks_3d_model_embedder'] );
 			wp_update_attachment_metadata( (int) $id, $metadata );
 		}
 
@@ -57,23 +57,23 @@ function embed_3d_models_uninstall_site(): void {
 }
 
 if ( is_multisite() ) {
-	$embed_3d_models_page = 1;
+	$pratiks_3d_model_embedder_page = 1;
 	do {
-		$embed_3d_models_sites = get_sites(
+		$pratiks_3d_model_embedder_sites = get_sites(
 			array(
 				'fields' => 'ids',
 				'number' => 100,
-				'offset' => ( $embed_3d_models_page - 1 ) * 100,
+				'offset' => ( $pratiks_3d_model_embedder_page - 1 ) * 100,
 			)
 		);
-		foreach ( $embed_3d_models_sites as $embed_3d_models_site ) {
-			switch_to_blog( (int) $embed_3d_models_site );
-			embed_3d_models_uninstall_site();
+		foreach ( $pratiks_3d_model_embedder_sites as $pratiks_3d_model_embedder_site ) {
+			switch_to_blog( (int) $pratiks_3d_model_embedder_site );
+			pratiks_3d_model_embedder_uninstall_site();
 			restore_current_blog();
 		}
-		++$embed_3d_models_page;
-		$embed_3d_models_found = count( $embed_3d_models_sites );
-	} while ( 100 === $embed_3d_models_found );
+		++$pratiks_3d_model_embedder_page;
+		$pratiks_3d_model_embedder_found = count( $pratiks_3d_model_embedder_sites );
+	} while ( 100 === $pratiks_3d_model_embedder_found );
 } else {
-	embed_3d_models_uninstall_site();
+	pratiks_3d_model_embedder_uninstall_site();
 }

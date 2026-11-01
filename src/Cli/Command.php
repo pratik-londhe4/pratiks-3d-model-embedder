@@ -1,6 +1,6 @@
 <?php
 /**
- * `wp embed-3d-models` commands.
+ * `wp pratiks-3d-model-embedder` commands.
  *
  * @package PratikLondhe\Embed3DModels
  */

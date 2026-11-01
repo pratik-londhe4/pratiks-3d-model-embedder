@@ -1,4 +1,4 @@
-=== Embed 3D Models ===
+=== Pratiks 3D Model Embedder ===
 Contributors: pratiklondhe
 Tags: 3d, glb, stl, 3d viewer, augmented reality
 Requires at least: 6.6
@@ -12,7 +12,7 @@ Upload GLB, glTF, STL and OBJ files to the Media Library and show them in posts 
 
 == Description ==
 
-WordPress does not let you upload 3D files ("Sorry, you are not allowed to upload this file type"), and has no way to show one. Embed 3D Models adds both: upload the file like an image, insert the **3D Model** block, publish. Visitors can turn the model around with the mouse or a finger.
+WordPress does not let you upload 3D files ("Sorry, you are not allowed to upload this file type"), and has no way to show one. Pratiks 3D Model Embedder adds both: upload the file like an image, insert the **3D Model** block, publish. Visitors can turn the model around with the mouse or a finger.
 
 **Upload 3D files safely**
 
@@ -40,7 +40,7 @@ The viewer is Google's open source `<model-viewer>`, bundled with the plugin tog
 
 **For developers**
 
-Filters and actions for every default, limit and message, JavaScript hooks in the editor, `wp embed-3d-models` WP-CLI commands, REST routes, and Abilities API abilities (WordPress 6.9+) so AI agents can list models, convert them and set posters. See [the reference](https://github.com/pratik-londhe4/embed-3d-models/blob/main/docs/REFERENCE.md).
+Filters and actions for every default, limit and message, JavaScript hooks in the editor, `wp pratiks-3d-model-embedder` WP-CLI commands, REST routes, and Abilities API abilities (WordPress 6.9+) so AI agents can list models, convert them and set posters. See [the reference](https://github.com/pratik-londhe4/pratiks-3d-model-embedder/blob/main/docs/REFERENCE.md).
 
 Free and open source under the GPL. No pro version, no upsells, no ads in wp-admin, no tracking.
 
@@ -66,11 +66,11 @@ OBJ colours and textures live in separate `.mtl` and image files, which cannot c
 
 = A large STL was not converted. =
 
-Files over 64 MB are not converted during the upload, to keep uploads fast. The block tells you so. Ask whoever manages the server to run `wp embed-3d-models convert <attachment ID> --ignore-limit`, or raise the limit with the `embed_3d_models_max_convert_bytes` filter.
+Files over 64 MB are not converted during the upload, to keep uploads fast. The block tells you so. Ask whoever manages the server to run `wp pratiks-3d-model-embedder convert <attachment ID> --ignore-limit`, or raise the limit with the `pratiks_3d_model_embedder_max_convert_bytes` filter.
 
 = Who can upload 3D files? =
 
-Everyone who can upload images (the `upload_files` capability). To limit 3D uploads to administrators: `add_filter( 'embed_3d_models_upload_capability', fn() => 'manage_options' );`
+Everyone who can upload images (the `upload_files` capability). To limit 3D uploads to administrators: `add_filter( 'pratiks_3d_model_embedder_upload_capability', fn() => 'manage_options' );`
 
 = Does it work on multisite? =
 
@@ -88,7 +88,7 @@ When you turn on **augmented reality** in a block, visitors on Android who tap "
 
 == Source code and libraries ==
 
-The plugin's own code is not minified. Its source, tests and build tools are on [GitHub](https://github.com/pratik-londhe4/embed-3d-models).
+The plugin's own code is not minified. Its source, tests and build tools are on [GitHub](https://github.com/pratik-londhe4/pratiks-3d-model-embedder).
 
 Bundled libraries, unchanged from their releases:
 

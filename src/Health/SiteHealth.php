@@ -49,9 +49,9 @@ final class SiteHealth implements Service {
 	 * @return array
 	 */
 	public function add_test( $tests ): array {
-		$tests                                     = (array) $tests;
-		$tests['direct']['embed_3d_models_upload'] = array(
-			'label' => __( '3D model uploads', 'embed-3d-models' ),
+		$tests = (array) $tests;
+		$tests['direct']['pratiks_3d_model_embedder_upload'] = array(
+			'label' => __( '3D model uploads', 'pratiks-3d-model-embedder' ),
 			'test'  => array( $this, 'run' ),
 		);
 
@@ -73,14 +73,14 @@ final class SiteHealth implements Service {
 		}
 		if ( $missing ) {
 			$detail = is_multisite()
-				? __( 'On a multisite network, add these extensions to "Upload file types" in Network Admin > Settings.', 'embed-3d-models' )
-				: __( 'Another plugin or the theme removes them from the allowed upload types.', 'embed-3d-models' );
+				? __( 'On a multisite network, add these extensions to "Upload file types" in Network Admin > Settings.', 'pratiks-3d-model-embedder' )
+				: __( 'Another plugin or the theme removes them from the allowed upload types.', 'pratiks-3d-model-embedder' );
 
 			return $this->result(
 				'recommended',
-				__( 'Some 3D file types cannot be uploaded', 'embed-3d-models' ),
+				__( 'Some 3D file types cannot be uploaded', 'pratiks-3d-model-embedder' ),
 				/* translators: %s: list of file types, e.g. "STL, OBJ". */
-				sprintf( __( 'You cannot upload these types: %s.', 'embed-3d-models' ), implode( ', ', $missing ) ) . ' ' . $detail
+				sprintf( __( 'You cannot upload these types: %s.', 'pratiks-3d-model-embedder' ), implode( ', ', $missing ) ) . ' ' . $detail
 			);
 		}
 
@@ -93,12 +93,12 @@ final class SiteHealth implements Service {
 		if ( $failed ) {
 			return $this->result(
 				'recommended',
-				__( 'Some 3D models could not be converted', 'embed-3d-models' ),
+				__( 'Some 3D models could not be converted', 'pratiks-3d-model-embedder' ),
 				sprintf(
 					/* translators: 1: number of models, 2: WP-CLI command. */
-					_n( '%1$d STL or OBJ file was not converted, so the 3D Model block cannot show it. Large files can be converted with: %2$s', '%1$d STL or OBJ files were not converted, so the 3D Model block cannot show them. Large files can be converted with: %2$s', count( $failed ), 'embed-3d-models' ),
+					_n( '%1$d STL or OBJ file was not converted, so the 3D Model block cannot show it. Large files can be converted with: %2$s', '%1$d STL or OBJ files were not converted, so the 3D Model block cannot show them. Large files can be converted with: %2$s', count( $failed ), 'pratiks-3d-model-embedder' ),
 					count( $failed ),
-					'wp embed-3d-models convert ' . implode( ' ', wp_list_pluck( $failed, 'id' ) ) . ' --ignore-limit'
+					'wp pratiks-3d-model-embedder convert ' . implode( ' ', wp_list_pluck( $failed, 'id' ) ) . ' --ignore-limit'
 				)
 			);
 		}
@@ -110,14 +110,14 @@ final class SiteHealth implements Service {
 			if ( '' !== $type && 0 !== strpos( $type, 'model/vnd.usdz+zip' ) ) {
 				return $this->result(
 					'recommended',
-					__( 'USDZ files are served with the wrong type', 'embed-3d-models' ),
+					__( 'USDZ files are served with the wrong type', 'pratiks-3d-model-embedder' ),
 					/* translators: %s: the Content-Type the server sends. */
-					sprintf( __( 'Your server sends USDZ files as "%s". iPhones and iPads only open them in augmented reality when the type is model/vnd.usdz+zip. Ask your host to add that type for .usdz files.', 'embed-3d-models' ), $type )
+					sprintf( __( 'Your server sends USDZ files as "%s". iPhones and iPads only open them in augmented reality when the type is model/vnd.usdz+zip. Ask your host to add that type for .usdz files.', 'pratiks-3d-model-embedder' ), $type )
 				);
 			}
 		}
 
-		return $this->result( 'good', __( '3D models can be uploaded', 'embed-3d-models' ), __( 'GLB, glTF, USDZ, STL and OBJ files can be uploaded to the Media Library.', 'embed-3d-models' ) );
+		return $this->result( 'good', __( '3D models can be uploaded', 'pratiks-3d-model-embedder' ), __( 'GLB, glTF, USDZ, STL and OBJ files can be uploaded to the Media Library.', 'pratiks-3d-model-embedder' ) );
 	}
 
 	/**
@@ -133,12 +133,12 @@ final class SiteHealth implements Service {
 			'label'       => $label,
 			'status'      => $status,
 			'badge'       => array(
-				'label' => __( 'Media', 'embed-3d-models' ),
+				'label' => __( 'Media', 'pratiks-3d-model-embedder' ),
 				'color' => 'blue',
 			),
 			'description' => '<p>' . esc_html( $description ) . '</p>',
 			'actions'     => '',
-			'test'        => 'embed_3d_models_upload',
+			'test'        => 'pratiks_3d_model_embedder_upload',
 		);
 	}
 }

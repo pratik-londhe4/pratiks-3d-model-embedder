@@ -10,7 +10,7 @@ const { torusKnotStl } = require( './utils/models' );
  * @return {Promise<string>} Post ID.
  */
 async function seed( request, empty = false ) {
-	let block = '<!-- wp:embed-3d-models/model /-->';
+	let block = '<!-- wp:pratiks-3d-model-embedder/model /-->';
 	if ( ! empty ) {
 		const nonce = ( await ( await request.get( '/wp-admin/admin-ajax.php?action=rest-nonce' ) ).text() ).trim();
 		const response = await request.post( '/index.php?rest_route=%2Fwp%2Fv2%2Fmedia', {
@@ -18,7 +18,7 @@ async function seed( request, empty = false ) {
 			multipart: { file: { name: 'a11y-knot.stl', mimeType: 'application/octet-stream', buffer: torusKnotStl( 80, 8 ) } },
 		} );
 		const id = ( await response.json() ).id;
-		block = `<!-- wp:embed-3d-models/model {"id":${ id },"alt":"A torus knot","caption":"Printed in PLA.","reveal":"manual"} /-->`;
+		block = `<!-- wp:pratiks-3d-model-embedder/model {"id":${ id },"alt":"A torus knot","caption":"Printed in PLA.","reveal":"manual"} /-->`;
 	}
 	return wp( 'post', 'create', '--post_title=Accessibility', '--post_status=publish', `--post_content=${ block }`, '--porcelain' );
 }

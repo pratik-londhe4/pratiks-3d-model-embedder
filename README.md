@@ -1,19 +1,19 @@
 <p align="center"><img src=".wordpress-org/icon-256x256.png" alt="" width="88"></p>
 
-<h1 align="center">Embed 3D Models</h1>
+<h1 align="center">Pratiks 3D Model Embedder</h1>
 
 <p align="center">
-  <a href="https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/pratik-londhe4/embed-3d-models/main/blueprint.json"><img src="https://img.shields.io/badge/Try%20in-WordPress%20Playground-3858e9?logo=wordpress&logoColor=white" alt="Try in WordPress Playground"></a>
-  <a href="https://github.com/pratik-londhe4/embed-3d-models/releases/latest"><img src="https://img.shields.io/github/v/release/pratik-londhe4/embed-3d-models?label=release&color=2271b1" alt="Latest release"></a>
+  <a href="https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/pratik-londhe4/pratiks-3d-model-embedder/main/blueprint.json"><img src="https://img.shields.io/badge/Try%20in-WordPress%20Playground-3858e9?logo=wordpress&logoColor=white" alt="Try in WordPress Playground"></a>
+  <a href="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/releases/latest"><img src="https://img.shields.io/github/v/release/pratik-londhe4/pratiks-3d-model-embedder?label=release&color=2271b1" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/WordPress-6.6%2B-3858e9?logo=wordpress&logoColor=white" alt="WordPress 6.6+">
   <img src="https://img.shields.io/badge/PHP-7.4%2B-777bb4?logo=php&logoColor=white" alt="PHP 7.4+">
   <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-GPL--2.0--or--later-blue" alt="License: GPL-2.0-or-later"></a>
   <br>
-  <a href="https://github.com/pratik-londhe4/embed-3d-models/actions/workflows/phpcs.yml"><img src="https://github.com/pratik-londhe4/embed-3d-models/actions/workflows/phpcs.yml/badge.svg" alt="PHPCS"></a>
-  <a href="https://github.com/pratik-londhe4/embed-3d-models/actions/workflows/phpstan.yml"><img src="https://github.com/pratik-londhe4/embed-3d-models/actions/workflows/phpstan.yml/badge.svg" alt="PHPStan"></a>
-  <a href="https://github.com/pratik-londhe4/embed-3d-models/actions/workflows/unit-tests.yml"><img src="https://github.com/pratik-londhe4/embed-3d-models/actions/workflows/unit-tests.yml/badge.svg" alt="Unit tests"></a>
-  <a href="https://github.com/pratik-londhe4/embed-3d-models/actions/workflows/e2e-tests.yml"><img src="https://github.com/pratik-londhe4/embed-3d-models/actions/workflows/e2e-tests.yml/badge.svg" alt="E2E tests"></a>
-  <a href="https://github.com/pratik-londhe4/embed-3d-models/actions/workflows/plugin-check.yml"><img src="https://github.com/pratik-londhe4/embed-3d-models/actions/workflows/plugin-check.yml/badge.svg" alt="Plugin Check"></a>
+  <a href="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/actions/workflows/phpcs.yml"><img src="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/actions/workflows/phpcs.yml/badge.svg" alt="PHPCS"></a>
+  <a href="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/actions/workflows/phpstan.yml"><img src="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/actions/workflows/phpstan.yml/badge.svg" alt="PHPStan"></a>
+  <a href="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/actions/workflows/unit-tests.yml"><img src="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/actions/workflows/unit-tests.yml/badge.svg" alt="Unit tests"></a>
+  <a href="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/actions/workflows/e2e-tests.yml"><img src="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/actions/workflows/e2e-tests.yml/badge.svg" alt="E2E tests"></a>
+  <a href="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/actions/workflows/plugin-check.yml"><img src="https://github.com/pratik-londhe4/pratiks-3d-model-embedder/actions/workflows/plugin-check.yml/badge.svg" alt="Plugin Check"></a>
 </p>
 
 <p align="center">Upload GLB, glTF, STL and OBJ files and show them in posts as 3D models visitors can rotate.</p>
@@ -24,7 +24,7 @@
 
 ---
 
-WordPress refuses 3D files ("Sorry, you are not allowed to upload this file type") and has no way to show one. Embed 3D Models lets you upload them like images, checks each file by its content, converts STL and OBJ to GLB, and adds a **3D Model** block built on Google's open source [`<model-viewer>`](https://modelviewer.dev/).
+WordPress refuses 3D files ("Sorry, you are not allowed to upload this file type") and has no way to show one. Pratiks 3D Model Embedder lets you upload them like images, checks each file by its content, converts STL and OBJ to GLB, and adds a **3D Model** block built on Google's open source [`<model-viewer>`](https://modelviewer.dev/).
 
 > [!NOTE]
 > Free and open source under the GPL. No pro version, no upsells, no ads in wp-admin, no tracking. Nothing loads from a CDN.
@@ -42,13 +42,13 @@ WordPress refuses 3D files ("Sorry, you are not allowed to upload this file type
 
 ## Install
 
-1. Download `embed-3d-models.zip` from the [latest release](https://github.com/pratik-londhe4/embed-3d-models/releases/latest).
+1. Download `pratiks-3d-model-embedder.zip` from the [latest release](https://github.com/pratik-londhe4/pratiks-3d-model-embedder/releases/latest).
 2. In WordPress, go to **Plugins > Add New Plugin > Upload Plugin**, choose the zip and activate it.
 
 Or with WP-CLI:
 
 ```sh
-wp plugin install https://github.com/pratik-londhe4/embed-3d-models/releases/latest/download/embed-3d-models.zip --activate
+wp plugin install https://github.com/pratik-londhe4/pratiks-3d-model-embedder/releases/latest/download/pratiks-3d-model-embedder.zip --activate
 ```
 
 Needs WordPress 6.6+ and PHP 7.4+. The **Try in WordPress Playground** badge opens a throwaway WordPress in your browser with the plugin and a converted STL model.
@@ -66,9 +66,9 @@ Add the **3D Model** block, click **Upload** and pick a `.glb`, `.stl` or `.obj`
 | USDZ | checked | iPhone and iPad AR file only |
 
 ```sh
-wp embed-3d-models list
-wp embed-3d-models convert 123 --ignore-limit   # an STL over the 64 MB upload limit
-wp embed-3d-models check ~/Downloads/part.stl   # would it be accepted?
+wp pratiks-3d-model-embedder list
+wp pratiks-3d-model-embedder convert 123 --ignore-limit   # an STL over the 64 MB upload limit
+wp pratiks-3d-model-embedder check ~/Downloads/part.stl   # would it be accepted?
 ```
 
 ## Screenshots
@@ -93,7 +93,7 @@ wp embed-3d-models check ~/Downloads/part.stl   # would it be accepted?
 ## Files
 
 ```
-embed-3d-models.php     plugin header, autoloader, boot
+pratiks-3d-model-embedder.php     plugin header, autoloader, boot
 uninstall.php           removes converted GLBs and the plugin's metadata
 block/block.json        the 3D Model block
 src/Formats.php         accepted formats and messages

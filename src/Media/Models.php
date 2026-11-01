@@ -16,12 +16,12 @@ defined( 'ABSPATH' ) || exit;
  * hooks, the block, REST, WP-CLI and the abilities.
  *
  * What the plugin knows about a model is stored in the attachment metadata
- * under `embed_3d_models`: status, triangle count, the converted GLB's file
+ * under `pratiks_3d_model_embedder`: status, triangle count, the converted GLB's file
  * name and any error.
  */
 final class Models {
 
-	public const META_KEY = 'embed_3d_models';
+	public const META_KEY = 'pratiks_3d_model_embedder';
 
 	/**
 	 * Default size limit for converting at upload: 64 MB.
@@ -72,7 +72,7 @@ final class Models {
 
 		if ( null === $format || '' === $file || ! is_readable( $file ) ) {
 			$meta['status'] = 'failed';
-			$meta['error']  = Formats::message( 'missing_file', __( 'The model file is missing from the uploads folder.', 'embed-3d-models' ) );
+			$meta['error']  = Formats::message( 'missing_file', __( 'The model file is missing from the uploads folder.', 'pratiks-3d-model-embedder' ) );
 			return $meta;
 		}
 
@@ -88,7 +88,7 @@ final class Models {
 
 		if ( ! $ignore_limit && (int) filesize( $file ) > $this->max_convert_bytes() ) {
 			$meta['status'] = 'too_large';
-			$meta['error']  = Formats::message( 'too_large', __( 'This file is too large to convert while uploading. Ask an administrator to run: wp embed-3d-models convert', 'embed-3d-models' ) . ' ' . $id );
+			$meta['error']  = Formats::message( 'too_large', __( 'This file is too large to convert while uploading. Ask an administrator to run: wp pratiks-3d-model-embedder convert', 'pratiks-3d-model-embedder' ) . ' ' . $id );
 			return $meta;
 		}
 
@@ -105,7 +105,7 @@ final class Models {
 			 * @param int       $id    Attachment ID.
 			 * @param \WP_Error $error What went wrong.
 			 */
-			do_action( 'embed_3d_models_conversion_failed', $id, $result );
+			do_action( 'pratiks_3d_model_embedder_conversion_failed', $id, $result );
 
 			return $meta;
 		}
@@ -125,7 +125,7 @@ final class Models {
 		 * @param array  $meta The plugin's metadata for the model.
 		 * @param string $dest Path of the GLB.
 		 */
-		do_action( 'embed_3d_models_converted', $id, $meta, $dest );
+		do_action( 'pratiks_3d_model_embedder_converted', $id, $meta, $dest );
 
 		return $meta;
 	}
@@ -248,7 +248,7 @@ final class Models {
 		} elseif ( wp_attachment_is_image( $poster_id ) ) {
 			update_post_meta( $id, '_thumbnail_id', $poster_id );
 		} else {
-			return new \WP_Error( 'embed_3d_models_not_an_image', Formats::message( 'not_an_image', __( 'The poster must be an image from the Media Library.', 'embed-3d-models' ) ), array( 'status' => 400 ) );
+			return new \WP_Error( 'pratiks_3d_model_embedder_not_an_image', Formats::message( 'not_an_image', __( 'The poster must be an image from the Media Library.', 'pratiks-3d-model-embedder' ) ), array( 'status' => 400 ) );
 		}
 
 		/**
@@ -257,7 +257,7 @@ final class Models {
 		 * @param int $id        Model attachment ID.
 		 * @param int $poster_id Image attachment ID, or 0 when removed.
 		 */
-		do_action( 'embed_3d_models_poster_set', $id, $poster_id );
+		do_action( 'pratiks_3d_model_embedder_poster_set', $id, $poster_id );
 
 		return (array) $this->info( $id );
 	}
@@ -289,7 +289,7 @@ final class Models {
 		 * @param int    $id   Attachment ID.
 		 * @param string $path Deleted file.
 		 */
-		do_action( 'embed_3d_models_derived_deleted', $id, $path );
+		do_action( 'pratiks_3d_model_embedder_derived_deleted', $id, $path );
 	}
 
 	/**
@@ -302,7 +302,7 @@ final class Models {
 		 *
 		 * @param int $bytes Size in bytes. Default 64 MB.
 		 */
-		$bytes = (int) apply_filters( 'embed_3d_models_max_convert_bytes', self::MAX_CONVERT_BYTES );
+		$bytes = (int) apply_filters( 'pratiks_3d_model_embedder_max_convert_bytes', self::MAX_CONVERT_BYTES );
 
 		return $bytes > 0 ? $bytes : self::MAX_CONVERT_BYTES;
 	}
@@ -339,6 +339,6 @@ final class Models {
 	 * The error for an ID that is not a model.
 	 */
 	private function not_a_model(): \WP_Error {
-		return new \WP_Error( 'embed_3d_models_not_a_model', Formats::message( 'not_a_model', __( 'That attachment is not a 3D model.', 'embed-3d-models' ) ), array( 'status' => 404 ) );
+		return new \WP_Error( 'pratiks_3d_model_embedder_not_a_model', Formats::message( 'not_a_model', __( 'That attachment is not a 3D model.', 'pratiks-3d-model-embedder' ) ), array( 'status' => 404 ) );
 	}
 }

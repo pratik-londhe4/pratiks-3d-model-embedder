@@ -38,12 +38,12 @@ final class Validator {
 		$ext    = strtolower( $ext );
 		$format = Formats::for_extension( $ext );
 		if ( null === $format ) {
-			return $this->error( 'unsupported', __( 'This is not a 3D file type Embed 3D Models accepts.', 'embed-3d-models' ) );
+			return $this->error( 'unsupported', __( 'This is not a 3D file type Pratiks 3D Model Embedder accepts.', 'pratiks-3d-model-embedder' ) );
 		}
 
 		$size = is_readable( $path ) ? (int) filesize( $path ) : 0;
 		if ( $size < 1 ) {
-			return $this->error( 'empty', __( 'The file is empty or could not be read.', 'embed-3d-models' ) );
+			return $this->error( 'empty', __( 'The file is empty or could not be read.', 'pratiks-3d-model-embedder' ) );
 		}
 
 		switch ( $ext ) {
@@ -71,12 +71,12 @@ final class Validator {
 		 * @param string         $path   File on disk.
 		 * @param string         $ext    File extension.
 		 */
-		$filtered = apply_filters( 'embed_3d_models_validate_file', $result, $path, $ext );
+		$filtered = apply_filters( 'pratiks_3d_model_embedder_validate_file', $result, $path, $ext );
 		if ( true === $filtered || $filtered instanceof \WP_Error ) {
 			return $filtered;
 		}
 
-		return $this->error( 'refused', __( 'This file was refused by a check on this site.', 'embed-3d-models' ) );
+		return $this->error( 'refused', __( 'This file was refused by a check on this site.', 'pratiks-3d-model-embedder' ) );
 	}
 
 	/**
@@ -87,7 +87,7 @@ final class Validator {
 	 * @return true|\WP_Error
 	 */
 	private function check_glb( string $path, int $size ) {
-		$invalid = $this->error( 'invalid_glb', __( 'This file is not a valid GLB (binary glTF 2.0) model.', 'embed-3d-models' ) );
+		$invalid = $this->error( 'invalid_glb', __( 'This file is not a valid GLB (binary glTF 2.0) model.', 'pratiks-3d-model-embedder' ) );
 
 		$handle = Stream::open( $path, 'rb' );
 		if ( null === $handle ) {
@@ -119,9 +119,9 @@ final class Validator {
 	 * @return true|\WP_Error
 	 */
 	private function check_gltf( string $path, int $size ) {
-		$invalid = $this->error( 'invalid_gltf', __( 'This file is not a valid glTF 2.0 model.', 'embed-3d-models' ) );
+		$invalid = $this->error( 'invalid_gltf', __( 'This file is not a valid glTF 2.0 model.', 'pratiks-3d-model-embedder' ) );
 		if ( $size > self::MAX_JSON ) {
-			return $this->error( 'gltf_too_large', __( 'This glTF file is too large to check. Upload it as a .glb instead.', 'embed-3d-models' ) );
+			return $this->error( 'gltf_too_large', __( 'This glTF file is too large to check. Upload it as a .glb instead.', 'pratiks-3d-model-embedder' ) );
 		}
 
 		$code = $this->scan_text( $path );
@@ -160,7 +160,7 @@ final class Validator {
 		 *
 		 * @param bool $allow Whether to allow external resources.
 		 */
-		if ( apply_filters( 'embed_3d_models_allow_external_resources', false ) ) {
+		if ( apply_filters( 'pratiks_3d_model_embedder_allow_external_resources', false ) ) {
 			return true;
 		}
 
@@ -168,7 +168,7 @@ final class Validator {
 			foreach ( (array) ( $data[ $list ] ?? array() ) as $item ) {
 				$uri = is_array( $item ) && isset( $item['uri'] ) ? (string) $item['uri'] : '';
 				if ( '' !== $uri && 0 !== strpos( $uri, 'data:' ) ) {
-					return $this->error( 'external_resources', __( 'This glTF file points to separate files (such as a .bin file or textures) that cannot be uploaded with it. Export the model as a single .glb file and upload that instead.', 'embed-3d-models' ) );
+					return $this->error( 'external_resources', __( 'This glTF file points to separate files (such as a .bin file or textures) that cannot be uploaded with it. Export the model as a single .glb file and upload that instead.', 'pratiks-3d-model-embedder' ) );
 				}
 			}
 		}
@@ -192,7 +192,7 @@ final class Validator {
 			}
 		}
 
-		return $this->error( 'invalid_usdz', __( 'This file is not a valid USDZ model.', 'embed-3d-models' ) );
+		return $this->error( 'invalid_usdz', __( 'This file is not a valid USDZ model.', 'pratiks-3d-model-embedder' ) );
 	}
 
 	/**
@@ -218,7 +218,7 @@ final class Validator {
 			}
 		}
 
-		return $this->error( 'invalid_stl', __( 'This file is not a valid STL model.', 'embed-3d-models' ) );
+		return $this->error( 'invalid_stl', __( 'This file is not a valid STL model.', 'pratiks-3d-model-embedder' ) );
 	}
 
 	/**
@@ -236,7 +236,7 @@ final class Validator {
 			return true;
 		}
 
-		return $this->error( 'invalid_obj', __( 'This file is not a valid OBJ model.', 'embed-3d-models' ) );
+		return $this->error( 'invalid_obj', __( 'This file is not a valid OBJ model.', 'pratiks-3d-model-embedder' ) );
 	}
 
 	/**
@@ -311,7 +311,7 @@ final class Validator {
 	 * The error for a text model carrying code.
 	 */
 	private function code_error(): \WP_Error {
-		return $this->error( 'embedded_code', __( 'This file contains code (PHP or a script tag), which a 3D model never needs. It was not uploaded.', 'embed-3d-models' ) );
+		return $this->error( 'embedded_code', __( 'This file contains code (PHP or a script tag), which a 3D model never needs. It was not uploaded.', 'pratiks-3d-model-embedder' ) );
 	}
 
 	/**
@@ -321,6 +321,6 @@ final class Validator {
 	 * @param string $message Default message.
 	 */
 	private function error( string $key, string $message ): \WP_Error {
-		return new \WP_Error( 'embed_3d_models_' . $key, Formats::message( $key, $message ), array( 'status' => 400 ) );
+		return new \WP_Error( 'pratiks_3d_model_embedder_' . $key, Formats::message( $key, $message ), array( 'status' => 400 ) );
 	}
 }

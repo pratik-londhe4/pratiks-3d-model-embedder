@@ -2,12 +2,12 @@
 parameters:
 	level: 6
 	paths:
-		- embed-3d-models.php
+		- pratiks-3d-model-embedder.php
 		- uninstall.php
 		- src
 	# Optional wp-config constants go here and in tests/phpstan-bootstrap.php.
 	# dynamicConstantNames:
-	#	- EMBED_3D_MODELS_SOMETHING
+	#	- PRATIKS_3D_MODEL_EMBEDDER_SOMETHING
 	scanFiles:
 		- vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
 	bootstrapFiles:

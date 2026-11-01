@@ -27,7 +27,7 @@ final class RendererTest extends TestCase {
 		$this->renderer = new Renderer( new Models( new Converter() ) );
 		Functions\when( 'get_block_wrapper_attributes' )->alias(
 			static function ( $extra ) {
-				return 'class="wp-block-embed-3d-models-model ' . $extra['class'] . '"';
+				return 'class="wp-block-pratiks-3d-model-embedder-model ' . $extra['class'] . '"';
 			}
 		);
 		Functions\when( 'esc_url_raw' )->returnArg();
@@ -52,7 +52,7 @@ final class RendererTest extends TestCase {
 			)
 		);
 
-		$this->assertStringContainsString( '<figure class="wp-block-embed-3d-models-model e3dm-figure">', $html );
+		$this->assertStringContainsString( '<figure class="wp-block-pratiks-3d-model-embedder-model e3dm-figure">', $html );
 		$this->assertStringContainsString( 'src="https://example.com/chair.glb"', $html );
 		$this->assertStringContainsString( 'alt="A &quot;chair&quot;"', $html );
 		$this->assertStringContainsString( ' camera-controls ', $html );
@@ -138,7 +138,7 @@ final class RendererTest extends TestCase {
 	}
 
 	public function test_viewer_attributes_filter(): void {
-		Filters\expectApplied( 'embed_3d_models_viewer_attributes' )
+		Filters\expectApplied( 'pratiks_3d_model_embedder_viewer_attributes' )
 			->once()
 			->andReturnUsing(
 				static function ( $viewer ) {
@@ -160,7 +160,7 @@ final class RendererTest extends TestCase {
 	}
 
 	public function test_render_filter(): void {
-		Filters\expectApplied( 'embed_3d_models_render' )->once()->andReturn( '<p>replaced</p>' );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_render' )->once()->andReturn( '<p>replaced</p>' );
 
 		$this->assertSame( '<p>replaced</p>', $this->renderer->render( array( 'src' => 'https://example.com/a.glb' ) ) );
 	}

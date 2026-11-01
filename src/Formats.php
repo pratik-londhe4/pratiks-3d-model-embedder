@@ -64,7 +64,7 @@ final class Formats {
 		 *
 		 * @param array $formats Formats keyed by extension.
 		 */
-		$formats = (array) apply_filters( 'embed_3d_models_formats', $defaults );
+		$formats = (array) apply_filters( 'pratiks_3d_model_embedder_formats', $defaults );
 		$result  = array();
 		foreach ( $defaults as $ext => $format ) {
 			if ( isset( $formats[ $ext ] ) && is_array( $formats[ $ext ] ) ) {
@@ -147,7 +147,7 @@ final class Formats {
 		 * @param string $message Message text.
 		 * @param string $key     Which message, e.g. "invalid_glb".
 		 */
-		$filtered = (string) apply_filters( 'embed_3d_models_message', $message, $key );
+		$filtered = (string) apply_filters( 'pratiks_3d_model_embedder_message', $message, $key );
 
 		return '' !== $filtered ? $filtered : $message;
 	}

@@ -22,9 +22,9 @@ STL and OBJ are converted to GLB on `wp_generate_attachment_metadata`, next to t
 - Normals come from the triangle corners (STL normals are often wrong). OBJ `vn` normals are used when a face has them.
 - STL: Z-up to Y-up, millimetres to metres (0.001). OBJ: unchanged. Both filterable.
 - One material, slate grey, double-sided. Filterable.
-- Files over 64 MB are not converted during upload (status `too_large`). `wp embed-3d-models convert <id> --ignore-limit` converts them.
+- Files over 64 MB are not converted during upload (status `too_large`). `wp pratiks-3d-model-embedder convert <id> --ignore-limit` converts them.
 
-What the plugin knows about a model is stored in its attachment metadata under `embed_3d_models`:
+What the plugin knows about a model is stored in its attachment metadata under `pratiks_3d_model_embedder`:
 
 | Key | Value |
 | --- | --- |
@@ -40,7 +40,7 @@ A model's poster is its `_thumbnail_id`. The Media Library shows it as the thumb
 
 ## Block
 
-`embed-3d-models/model`, a dynamic block: the model's address is looked up on every view, so a model converted again still shows.
+`pratiks-3d-model-embedder/model`, a dynamic block: the model's address is looked up on every view, so a model converted again still shows.
 
 | Attribute | Default | Notes |
 | --- | --- | --- |
@@ -81,36 +81,36 @@ PHP filters:
 
 | Hook | Arguments | Use |
 | --- | --- | --- |
-| `embed_3d_models_upload_capability` | `( string $capability )` | Who may upload 3D files. Default `upload_files` |
-| `embed_3d_models_formats` | `( array $formats )` | Accepted formats keyed by extension. Remove a key to refuse that format; `mime` and `label` can be changed |
-| `embed_3d_models_validate_file` | `( true\|WP_Error $result, string $path, string $ext )` | Final say on an upload. Return a `WP_Error` (or `false`) to refuse |
-| `embed_3d_models_allow_external_resources` | `( bool $allow )` | Accept glTF files that point to separate `.bin` or texture files. Default `false` |
-| `embed_3d_models_max_convert_bytes` | `( int $bytes )` | Largest STL or OBJ converted during upload. Default 64 MB |
-| `embed_3d_models_conversion_scale` | `( float $scale, string $ext )` | Default 0.001 for STL, 1 for OBJ |
-| `embed_3d_models_conversion_up_axis` | `( string $axis, string $ext )` | `y` or `z`. Default `z` for STL, `y` for OBJ |
-| `embed_3d_models_conversion_color` | `( float[] $rgba )` | Colour of converted models, 0 to 1. Default `[0.42, 0.45, 0.5, 1]`, a slate grey |
-| `embed_3d_models_viewer_attributes` | `( array $attributes, array $block_attributes, WP_Block\|null $block )` | Attributes of the `<model-viewer>` element. `true` adds a bare attribute, `false`/`null` removes one |
-| `embed_3d_models_render` | `( string $html, array $block_attributes )` | The block's HTML |
-| `embed_3d_models_decoder_locations` | `( array $locations )` | `dracoDecoderLocation`, `ktx2TranscoderLocation`, `meshoptDecoderLocation` |
-| `embed_3d_models_message` | `( string $message, string $key )` | Any message shown to people, by key (`invalid_glb`, `external_resources`, `embedded_code`, `too_large`, `load_failed`, ...) |
+| `pratiks_3d_model_embedder_upload_capability` | `( string $capability )` | Who may upload 3D files. Default `upload_files` |
+| `pratiks_3d_model_embedder_formats` | `( array $formats )` | Accepted formats keyed by extension. Remove a key to refuse that format; `mime` and `label` can be changed |
+| `pratiks_3d_model_embedder_validate_file` | `( true\|WP_Error $result, string $path, string $ext )` | Final say on an upload. Return a `WP_Error` (or `false`) to refuse |
+| `pratiks_3d_model_embedder_allow_external_resources` | `( bool $allow )` | Accept glTF files that point to separate `.bin` or texture files. Default `false` |
+| `pratiks_3d_model_embedder_max_convert_bytes` | `( int $bytes )` | Largest STL or OBJ converted during upload. Default 64 MB |
+| `pratiks_3d_model_embedder_conversion_scale` | `( float $scale, string $ext )` | Default 0.001 for STL, 1 for OBJ |
+| `pratiks_3d_model_embedder_conversion_up_axis` | `( string $axis, string $ext )` | `y` or `z`. Default `z` for STL, `y` for OBJ |
+| `pratiks_3d_model_embedder_conversion_color` | `( float[] $rgba )` | Colour of converted models, 0 to 1. Default `[0.42, 0.45, 0.5, 1]`, a slate grey |
+| `pratiks_3d_model_embedder_viewer_attributes` | `( array $attributes, array $block_attributes, WP_Block\|null $block )` | Attributes of the `<model-viewer>` element. `true` adds a bare attribute, `false`/`null` removes one |
+| `pratiks_3d_model_embedder_render` | `( string $html, array $block_attributes )` | The block's HTML |
+| `pratiks_3d_model_embedder_decoder_locations` | `( array $locations )` | `dracoDecoderLocation`, `ktx2TranscoderLocation`, `meshoptDecoderLocation` |
+| `pratiks_3d_model_embedder_message` | `( string $message, string $key )` | Any message shown to people, by key (`invalid_glb`, `external_resources`, `embedded_code`, `too_large`, `load_failed`, ...) |
 
 PHP actions:
 
 | Hook | Arguments | When |
 | --- | --- | --- |
-| `embed_3d_models_upload_rejected` | `( array $file, WP_Error $error )` | A 3D upload was refused by its content |
-| `embed_3d_models_converted` | `( int $id, array $meta, string $glb_path )` | An STL or OBJ became a GLB |
-| `embed_3d_models_conversion_failed` | `( int $id, WP_Error $error )` | It could not be converted |
-| `embed_3d_models_poster_set` | `( int $id, int $poster_id )` | A model's poster was set (`0` when removed) |
-| `embed_3d_models_derived_deleted` | `( int $id, string $path )` | A converted GLB was deleted with its model |
+| `pratiks_3d_model_embedder_upload_rejected` | `( array $file, WP_Error $error )` | A 3D upload was refused by its content |
+| `pratiks_3d_model_embedder_converted` | `( int $id, array $meta, string $glb_path )` | An STL or OBJ became a GLB |
+| `pratiks_3d_model_embedder_conversion_failed` | `( int $id, WP_Error $error )` | It could not be converted |
+| `pratiks_3d_model_embedder_poster_set` | `( int $id, int $poster_id )` | A model's poster was set (`0` when removed) |
+| `pratiks_3d_model_embedder_derived_deleted` | `( int $id, string $path )` | A converted GLB was deleted with its model |
 
 ```php
 // Only administrators upload 3D files, and STL prints show in orange.
-add_filter( 'embed_3d_models_upload_capability', fn() => 'manage_options' );
-add_filter( 'embed_3d_models_conversion_color', fn() => array( 1.0, 0.45, 0.1, 1.0 ) );
+add_filter( 'pratiks_3d_model_embedder_upload_capability', fn() => 'manage_options' );
+add_filter( 'pratiks_3d_model_embedder_conversion_color', fn() => array( 1.0, 0.45, 0.1, 1.0 ) );
 
 // Use a studio environment on every viewer.
-add_filter( 'embed_3d_models_viewer_attributes', function ( $attributes ) {
+add_filter( 'pratiks_3d_model_embedder_viewer_attributes', function ( $attributes ) {
 	$attributes['environment-image'] = 'neutral';
 	return $attributes;
 } );
@@ -120,15 +120,15 @@ JavaScript, through `wp.hooks` in the editor:
 
 | Hook | Type | Use |
 | --- | --- | --- |
-| `embed3dModels.viewerAttributes` | filter | `( Object attributes, Object blockAttributes )`. Attributes of the editor preview |
-| `embed3dModels.allowedTypes` | filter | `( string[] mimeTypes )`. Types offered by the block's Media Library |
-| `embed3dModels.posterOptions` | filter | `( Object options, Object blockAttributes )`. Options for `toBlob()`: `mimeType`, `qualityArgument`, `idealAspect` |
-| `embed3dModels.modelSelected` | action | `( Object media, Object blockAttributes )`. A model was picked or uploaded |
-| `embed3dModels.posterCreated` | action | `( Object media, Object blockAttributes )`. A poster image was saved |
+| `pratiks3dModelEmbedder.viewerAttributes` | filter | `( Object attributes, Object blockAttributes )`. Attributes of the editor preview |
+| `pratiks3dModelEmbedder.allowedTypes` | filter | `( string[] mimeTypes )`. Types offered by the block's Media Library |
+| `pratiks3dModelEmbedder.posterOptions` | filter | `( Object options, Object blockAttributes )`. Options for `toBlob()`: `mimeType`, `qualityArgument`, `idealAspect` |
+| `pratiks3dModelEmbedder.modelSelected` | action | `( Object media, Object blockAttributes )`. A model was picked or uploaded |
+| `pratiks3dModelEmbedder.posterCreated` | action | `( Object media, Object blockAttributes )`. A poster image was saved |
 
 ## REST
 
-Namespace `embed-3d-models/v1`. Each route needs `edit_post` on the model.
+Namespace `pratiks-3d-model-embedder/v1`. Each route needs `edit_post` on the model.
 
 | Route | Method | Does |
 | --- | --- | --- |
@@ -139,26 +139,26 @@ Namespace `embed-3d-models/v1`. Each route needs `edit_post` on the model.
 ## WP-CLI
 
 ```sh
-wp embed-3d-models list [--type=stl] [--limit=100] [--format=table|csv|json|ids|count]
-wp embed-3d-models get <id> [--format=table|json|yaml]
-wp embed-3d-models convert <id>... [--ignore-limit]
-wp embed-3d-models set-poster <model-id> <image-id>
-wp embed-3d-models check <file>
-wp embed-3d-models formats [--format=table|csv|json]
+wp pratiks-3d-model-embedder list [--type=stl] [--limit=100] [--format=table|csv|json|ids|count]
+wp pratiks-3d-model-embedder get <id> [--format=table|json|yaml]
+wp pratiks-3d-model-embedder convert <id>... [--ignore-limit]
+wp pratiks-3d-model-embedder set-poster <model-id> <image-id>
+wp pratiks-3d-model-embedder check <file>
+wp pratiks-3d-model-embedder formats [--format=table|csv|json]
 ```
 
 To import models with `wp media import`, pass `--user=<someone who can upload>`: the 3D types are only allowed for users with the upload capability.
 
 ## Abilities
 
-On WordPress 6.9 and later, in the `embed-3d-models` category, shown in REST under `/wp-abilities/v1/` and marked public for the MCP adapter:
+On WordPress 6.9 and later, in the `pratiks-3d-model-embedder` category, shown in REST under `/wp-abilities/v1/` and marked public for the MCP adapter:
 
 | Ability | Annotations | Input |
 | --- | --- | --- |
-| `embed-3d-models/list-models` | readonly | `{ limit?, format? }` |
-| `embed-3d-models/get-model` | readonly | `{ id }` |
-| `embed-3d-models/convert-model` | idempotent | `{ id }` |
-| `embed-3d-models/set-model-poster` | idempotent | `{ id, poster_id }` |
+| `pratiks-3d-model-embedder/list-models` | readonly | `{ limit?, format? }` |
+| `pratiks-3d-model-embedder/get-model` | readonly | `{ id }` |
+| `pratiks-3d-model-embedder/convert-model` | idempotent | `{ id }` |
+| `pratiks-3d-model-embedder/set-model-poster` | idempotent | `{ id, poster_id }` |
 
 ## Site Health
 
@@ -166,4 +166,4 @@ On WordPress 6.9 and later, in the `embed-3d-models` category, shown in REST und
 
 ## Data and uninstall
 
-No options, tables or cron events. Deleting the plugin removes every converted GLB and the `embed_3d_models` metadata key. The uploaded models and poster images stay: they are the site's media.
+No options, tables or cron events. Deleting the plugin removes every converted GLB and the `pratiks_3d_model_embedder` metadata key. The uploaded models and poster images stay: they are the site's media.
