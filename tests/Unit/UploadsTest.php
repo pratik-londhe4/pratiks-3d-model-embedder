@@ -55,7 +55,7 @@ final class UploadsTest extends TestCase {
 	}
 
 	public function test_formats_can_be_removed_by_filter(): void {
-		Filters\expectApplied( 'embed_3d_models_formats' )->andReturnUsing(
+		Filters\expectApplied( 'pratiks_3d_model_embedder_formats' )->andReturnUsing(
 			static function ( $formats ) {
 				unset( $formats['obj'] );
 				$formats['fbx'] = array( 'mime' => 'model/fbx' );
@@ -67,13 +67,13 @@ final class UploadsTest extends TestCase {
 	}
 
 	public function test_formats_filter_returning_junk_disables_nothing_unexpected(): void {
-		Filters\expectApplied( 'embed_3d_models_formats' )->andReturn( 'nope' );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_formats' )->andReturn( 'nope' );
 
 		$this->assertSame( array(), Formats::all() );
 	}
 
 	public function test_message_filter_falls_back_on_empty(): void {
-		Filters\expectApplied( 'embed_3d_models_message' )->once()->andReturn( '' );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_message' )->once()->andReturn( '' );
 
 		$this->assertSame( 'Default.', Formats::message( 'x', 'Default.' ) );
 	}
@@ -87,7 +87,7 @@ final class UploadsTest extends TestCase {
 	}
 
 	public function test_capability_filter_limits_uploads(): void {
-		Filters\expectApplied( 'embed_3d_models_upload_capability' )->andReturn( 'manage_options' );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_upload_capability' )->andReturn( 'manage_options' );
 
 		$this->assertSame( array( 'jpg' => 'image/jpeg' ), $this->uploads->add_mimes( array( 'jpg' => 'image/jpeg' ) ) );
 
@@ -96,13 +96,13 @@ final class UploadsTest extends TestCase {
 	}
 
 	public function test_empty_capability_falls_back(): void {
-		Filters\expectApplied( 'embed_3d_models_upload_capability' )->andReturn( '' );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_upload_capability' )->andReturn( '' );
 
 		$this->assertSame( 'upload_files', Uploads::capability() );
 	}
 
 	public function test_prefilter_refuses_a_fake_model_with_a_reason(): void {
-		Actions\expectDone( 'embed_3d_models_upload_rejected' )->once()->with( \Mockery::type( 'array' ), \Mockery::type( \WP_Error::class ) );
+		Actions\expectDone( 'pratiks_3d_model_embedder_upload_rejected' )->once()->with( \Mockery::type( 'array' ), \Mockery::type( \WP_Error::class ) );
 
 		$file = $this->uploads->prefilter(
 			array(
@@ -116,7 +116,7 @@ final class UploadsTest extends TestCase {
 	}
 
 	public function test_prefilter_leaves_other_files_alone(): void {
-		Actions\expectDone( 'embed_3d_models_upload_rejected' )->never();
+		Actions\expectDone( 'pratiks_3d_model_embedder_upload_rejected' )->never();
 		$file = array(
 			'name'     => 'photo.jpg',
 			'tmp_name' => '/nope',

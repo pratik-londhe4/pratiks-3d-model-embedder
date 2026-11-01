@@ -1,5 +1,5 @@
 {
-  "name": "embed-3d-models",
+  "name": "pratiks-3d-model-embedder",
   "private": true,
   "description": "Upload 3D models (GLB, glTF, USDZ, STL, OBJ) and show them with a block.",
   "license": "GPL-2.0-or-later",

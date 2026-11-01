@@ -42,7 +42,7 @@ test.describe( 'Screenshots', () => {
 	prepareSite( 'Maker Notes' );
 		knotId = await upload( request, 'torus-knot.stl', torusKnotStl() );
 		await upload( request, 'bracket.stl', binaryStl( 40 ) );
-		const block = `<!-- wp:embed-3d-models/model {"id":${ knotId },"alt":"A grey torus knot, printed in PLA","caption":"Printed in PLA at 0.2 mm layers.","backgroundColor":"#f0f0f0"} /-->`;
+		const block = `<!-- wp:pratiks-3d-model-embedder/model {"id":${ knotId },"alt":"A grey torus knot, printed in PLA","caption":"Printed in PLA at 0.2 mm layers.","backgroundColor":"#f0f0f0"} /-->`;
 		postId = Number( wp( 'post', 'create', '--post_title=A knot for the shelf', '--post_status=publish', `--post_content=${ p( 'I printed this torus knot last weekend. Turn it around to see how the loops cross.' ) }\n\n${ block }`, '--porcelain' ) );
 	} );
 

@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Abilities implements Service {
 
-	public const CATEGORY = 'embed-3d-models';
+	public const CATEGORY = 'pratiks-3d-model-embedder';
 
 	/**
 	 * Model attachments.
@@ -57,8 +57,8 @@ final class Abilities implements Service {
 		wp_register_ability_category(
 			self::CATEGORY,
 			array(
-				'label'       => __( '3D models', 'embed-3d-models' ),
-				'description' => __( '3D model files in the Media Library: list them, read their details, convert them and set their poster images.', 'embed-3d-models' ),
+				'label'       => __( '3D models', 'pratiks-3d-model-embedder' ),
+				'description' => __( '3D model files in the Media Library: list them, read their details, convert them and set their poster images.', 'pratiks-3d-model-embedder' ),
 			)
 		);
 	}
@@ -97,8 +97,8 @@ final class Abilities implements Service {
 
 		$this->ability(
 			'list-models',
-			__( 'List 3D models', 'embed-3d-models' ),
-			__( 'Lists 3D model files in the Media Library, newest first, with format, conversion status and triangle count.', 'embed-3d-models' ),
+			__( 'List 3D models', 'pratiks-3d-model-embedder' ),
+			__( 'Lists 3D model files in the Media Library, newest first, with format, conversion status and triangle count.', 'pratiks-3d-model-embedder' ),
 			array(
 				'type'                 => 'object',
 				'properties'           => array(
@@ -132,8 +132,8 @@ final class Abilities implements Service {
 
 		$this->ability(
 			'get-model',
-			__( 'Get a 3D model', 'embed-3d-models' ),
-			__( 'Details of one 3D model attachment: format, the file the block shows, conversion status, triangle count and poster.', 'embed-3d-models' ),
+			__( 'Get a 3D model', 'pratiks-3d-model-embedder' ),
+			__( 'Details of one 3D model attachment: format, the file the block shows, conversion status, triangle count and poster.', 'pratiks-3d-model-embedder' ),
 			$this->id_schema( array( 'id' => $id ) ),
 			$model,
 			array( $this, 'get_model' ),
@@ -146,8 +146,8 @@ final class Abilities implements Service {
 
 		$this->ability(
 			'convert-model',
-			__( 'Convert a 3D model again', 'embed-3d-models' ),
-			__( 'Converts an STL or OBJ model to GLB again, replacing the previous conversion. Counts triangles for GLB and glTF.', 'embed-3d-models' ),
+			__( 'Convert a 3D model again', 'pratiks-3d-model-embedder' ),
+			__( 'Converts an STL or OBJ model to GLB again, replacing the previous conversion. Counts triangles for GLB and glTF.', 'pratiks-3d-model-embedder' ),
 			$this->id_schema( array( 'id' => $id ) ),
 			$model,
 			array( $this, 'convert_model' ),
@@ -161,8 +161,8 @@ final class Abilities implements Service {
 
 		$this->ability(
 			'set-model-poster',
-			__( 'Set a 3D model poster', 'embed-3d-models' ),
-			__( 'Sets the image shown before a 3D model loads, also used as its Media Library thumbnail. Use 0 to remove it.', 'embed-3d-models' ),
+			__( 'Set a 3D model poster', 'pratiks-3d-model-embedder' ),
+			__( 'Sets the image shown before a 3D model loads, also used as its Media Library thumbnail. Use 0 to remove it.', 'pratiks-3d-model-embedder' ),
 			$this->id_schema(
 				array(
 					'id'        => $id,
@@ -218,7 +218,7 @@ final class Abilities implements Service {
 	public function get_model( $input = null ) {
 		$info = $this->models->info( (int) ( ( (array) $input )['id'] ?? 0 ) );
 
-		return null === $info ? new \WP_Error( 'embed_3d_models_not_a_model', __( 'That attachment is not a 3D model.', 'embed-3d-models' ) ) : $info;
+		return null === $info ? new \WP_Error( 'pratiks_3d_model_embedder_not_a_model', __( 'That attachment is not a 3D model.', 'pratiks-3d-model-embedder' ) ) : $info;
 	}
 
 	/**

@@ -152,7 +152,7 @@ final class ModelsTest extends TestCase {
 
 	public function test_stl_is_converted_next_to_the_original(): void {
 		$this->stl( 7 );
-		Actions\expectDone( 'embed_3d_models_converted' )->once()->with( 7, \Mockery::type( 'array' ), $this->dir . '/part-stl.glb' );
+		Actions\expectDone( 'pratiks_3d_model_embedder_converted' )->once()->with( 7, \Mockery::type( 'array' ), $this->dir . '/part-stl.glb' );
 
 		$info = $this->models->reprocess( 7 );
 
@@ -160,12 +160,12 @@ final class ModelsTest extends TestCase {
 		$this->assertSame( 1, $info['triangles'] );
 		$this->assertSame( 'https://example.com/uploads/part-stl.glb', $info['viewer_url'] );
 		$this->assertFileExists( $this->dir . '/part-stl.glb' );
-		$this->assertSame( 'part-stl.glb', $this->meta[7]['_wp_attachment_metadata']['embed_3d_models']['glb'] );
+		$this->assertSame( 'part-stl.glb', $this->meta[7]['_wp_attachment_metadata']['pratiks_3d_model_embedder']['glb'] );
 	}
 
 	public function test_files_over_the_limit_wait_for_wp_cli(): void {
 		$this->stl( 7 );
-		Filters\expectApplied( 'embed_3d_models_max_convert_bytes' )->andReturn( 10 );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_max_convert_bytes' )->andReturn( 10 );
 
 		$this->assertSame( 'too_large', $this->models->reprocess( 7 )['status'] );
 		$this->assertFileDoesNotExist( $this->dir . '/part-stl.glb' );
@@ -174,7 +174,7 @@ final class ModelsTest extends TestCase {
 	}
 
 	public function test_invalid_size_limit_falls_back(): void {
-		Filters\expectApplied( 'embed_3d_models_max_convert_bytes' )->andReturn( -1 );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_max_convert_bytes' )->andReturn( -1 );
 
 		$this->assertSame( 67108864, $this->models->max_convert_bytes() );
 	}
@@ -183,7 +183,7 @@ final class ModelsTest extends TestCase {
 		$file = $this->dir . '/broken.obj';
 		file_put_contents( $file, "v 0 0 0\n" );
 		$this->attachments[8] = array( 'model/obj', $file );
-		Actions\expectDone( 'embed_3d_models_conversion_failed' )->once()->with( 8, \Mockery::type( \WP_Error::class ) );
+		Actions\expectDone( 'pratiks_3d_model_embedder_conversion_failed' )->once()->with( 8, \Mockery::type( \WP_Error::class ) );
 
 		$info = $this->models->reprocess( 8 );
 
@@ -211,24 +211,24 @@ final class ModelsTest extends TestCase {
 		$this->attachments[11] = array( 'image/jpeg', $this->dir . '/a.jpg' );
 
 		$this->assertNull( $this->models->info( 11 ) );
-		$this->assertSame( 'embed_3d_models_not_a_model', $this->models->reprocess( 11 )->get_error_code() );
-		$this->assertSame( 'embed_3d_models_not_a_model', $this->models->set_poster( 11, 500 )->get_error_code() );
+		$this->assertSame( 'pratiks_3d_model_embedder_not_a_model', $this->models->reprocess( 11 )->get_error_code() );
+		$this->assertSame( 'pratiks_3d_model_embedder_not_a_model', $this->models->set_poster( 11, 500 )->get_error_code() );
 	}
 
 	public function test_poster_is_set_removed_and_must_be_an_image(): void {
 		$this->stl( 7 );
-		Actions\expectDone( 'embed_3d_models_poster_set' )->twice();
+		Actions\expectDone( 'pratiks_3d_model_embedder_poster_set' )->twice();
 
 		$this->assertSame( 500, $this->models->set_poster( 7, 500 )['poster_id'] );
 		$this->assertSame( 500, $this->meta[7]['_thumbnail_id'] );
-		$this->assertSame( 'embed_3d_models_not_an_image', $this->models->set_poster( 7, 501 )->get_error_code() );
+		$this->assertSame( 'pratiks_3d_model_embedder_not_an_image', $this->models->set_poster( 7, 501 )->get_error_code() );
 		$this->assertSame( 0, $this->models->set_poster( 7, 0 )['poster_id'] );
 	}
 
 	public function test_deleting_removes_only_the_derived_glb(): void {
 		$source = $this->stl( 7 );
 		$this->models->reprocess( 7 );
-		Actions\expectDone( 'embed_3d_models_derived_deleted' )->once()->with( 7, $this->dir . '/part-stl.glb' );
+		Actions\expectDone( 'pratiks_3d_model_embedder_derived_deleted' )->once()->with( 7, $this->dir . '/part-stl.glb' );
 
 		$this->models->delete_derived( 7 );
 
@@ -240,8 +240,8 @@ final class ModelsTest extends TestCase {
 		$this->stl( 7 );
 		$outside = sys_get_temp_dir() . '/e3dm-outside-' . uniqid() . '.glb';
 		file_put_contents( $outside, 'x' );
-		$this->meta[7]['_wp_attachment_metadata'] = array( 'embed_3d_models' => array( 'glb' => '../' . basename( $outside ) ) );
-		Actions\expectDone( 'embed_3d_models_derived_deleted' )->never();
+		$this->meta[7]['_wp_attachment_metadata'] = array( 'pratiks_3d_model_embedder' => array( 'glb' => '../' . basename( $outside ) ) );
+		Actions\expectDone( 'pratiks_3d_model_embedder_derived_deleted' )->never();
 
 		$this->models->delete_derived( 7 );
 

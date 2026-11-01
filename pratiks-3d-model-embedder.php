@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       Embed 3D Models
- * Plugin URI:        https://wordpress.org/plugins/embed-3d-models/
+ * Plugin Name:       Pratiks 3D Model Embedder
+ * Plugin URI:        https://wordpress.org/plugins/pratiks-3d-model-embedder/
  * Description:       Upload GLB, glTF, USDZ, STL and OBJ files and show them as interactive 3D models with a block.
  * Version:           1.0.0
  * Requires at least: 6.6
@@ -10,7 +10,7 @@
  * Author URI:        https://profiles.wordpress.org/pratiklondhe/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       embed-3d-models
+ * Text Domain:       pratiks-3d-model-embedder
  *
  * @package PratikLondhe\Embed3DModels
  */

@@ -79,7 +79,7 @@ final class Uploads implements Service {
 		 *
 		 * @param string $capability Capability.
 		 */
-		$capability = (string) apply_filters( 'embed_3d_models_upload_capability', 'upload_files' );
+		$capability = (string) apply_filters( 'pratiks_3d_model_embedder_upload_capability', 'upload_files' );
 
 		return '' !== $capability ? $capability : 'upload_files';
 	}
@@ -132,7 +132,7 @@ final class Uploads implements Service {
 		 * @param array     $file  The upload.
 		 * @param \WP_Error $error Why it was refused.
 		 */
-		do_action( 'embed_3d_models_upload_rejected', $file, $result );
+		do_action( 'pratiks_3d_model_embedder_upload_rejected', $file, $result );
 
 		return $file;
 	}
@@ -211,10 +211,10 @@ final class Uploads implements Service {
 	public function library_filter( $types ): array {
 		$types          = (array) $types;
 		$types['model'] = array(
-			__( '3D models', 'embed-3d-models' ),
-			__( 'Manage 3D models', 'embed-3d-models' ),
+			__( '3D models', 'pratiks-3d-model-embedder' ),
+			__( 'Manage 3D models', 'pratiks-3d-model-embedder' ),
 			/* translators: %s: number of 3D models. */
-			_n_noop( '3D model <span class="count">(%s)</span>', '3D models <span class="count">(%s)</span>', 'embed-3d-models' ),
+			_n_noop( '3D model <span class="count">(%s)</span>', '3D models <span class="count">(%s)</span>', 'pratiks-3d-model-embedder' ),
 		);
 
 		return $types;
@@ -245,7 +245,7 @@ final class Uploads implements Service {
 			return $response;
 		}
 
-		$response['embed3dModels'] = array(
+		$response['pratiks3dModelEmbedder'] = array(
 			'format'    => $info['format'],
 			'label'     => $info['label'],
 			'viewerUrl' => $info['viewer_url'],

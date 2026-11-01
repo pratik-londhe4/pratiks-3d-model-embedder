@@ -152,19 +152,19 @@ final class ConverterTest extends TestCase {
 		$result = ( new Converter() )->convert( Fixtures::file( 'obj', "v 0 0 0\nv 1 0 0\n" ), 'obj', $dest );
 
 		$this->assertInstanceOf( \WP_Error::class, $result );
-		$this->assertSame( 'embed_3d_models_no_triangles', $result->get_error_code() );
+		$this->assertSame( 'pratiks_3d_model_embedder_no_triangles', $result->get_error_code() );
 		$this->assertFileDoesNotExist( $dest );
 	}
 
 	public function test_only_stl_and_obj_are_converted(): void {
 		$result = ( new Converter() )->convert( Fixtures::file( 'glb', 'x' ), 'glb', Fixtures::path( 'glb' ) );
 
-		$this->assertSame( 'embed_3d_models_not_convertible', $result->get_error_code() );
+		$this->assertSame( 'pratiks_3d_model_embedder_not_convertible', $result->get_error_code() );
 	}
 
 	public function test_scale_and_up_axis_filters(): void {
-		Filters\expectApplied( 'embed_3d_models_conversion_scale' )->once()->with( 0.001, 'stl' )->andReturn( 1.0 );
-		Filters\expectApplied( 'embed_3d_models_conversion_up_axis' )->once()->with( 'z', 'stl' )->andReturn( 'y' );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_conversion_scale' )->once()->with( 0.001, 'stl' )->andReturn( 1.0 );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_conversion_up_axis' )->once()->with( 'z', 'stl' )->andReturn( 'y' );
 
 		$dest = Fixtures::path( 'glb' );
 		( new Converter() )->convert( Fixtures::file( 'stl', Fixtures::binary_stl( array( self::TRIANGLE ) ) ), 'stl', $dest );
@@ -174,8 +174,8 @@ final class ConverterTest extends TestCase {
 	}
 
 	public function test_invalid_filtered_scale_and_axis_fall_back(): void {
-		Filters\expectApplied( 'embed_3d_models_conversion_scale' )->andReturn( -5 );
-		Filters\expectApplied( 'embed_3d_models_conversion_up_axis' )->andReturn( 'x' );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_conversion_scale' )->andReturn( -5 );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_conversion_up_axis' )->andReturn( 'x' );
 
 		$dest = Fixtures::path( 'glb' );
 		( new Converter() )->convert( Fixtures::file( 'stl', Fixtures::binary_stl( array( self::TRIANGLE ) ) ), 'stl', $dest );
@@ -185,14 +185,14 @@ final class ConverterTest extends TestCase {
 	}
 
 	public function test_color_filter_is_clamped_and_invalid_falls_back(): void {
-		Filters\expectApplied( 'embed_3d_models_conversion_color' )->once()->andReturn( array( 2, -1, 0.5, 1 ) );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_conversion_color' )->once()->andReturn( array( 2, -1, 0.5, 1 ) );
 		$dest = Fixtures::path( 'glb' );
 		( new Converter() )->convert( Fixtures::file( 'stl', Fixtures::binary_stl( array( self::TRIANGLE ) ) ), 'stl', $dest );
 		$this->assertEquals( array( 1.0, 0.0, 0.5, 1.0 ), Fixtures::read_glb( $dest )['json']['materials'][0]['pbrMetallicRoughness']['baseColorFactor'] );
 	}
 
 	public function test_color_filter_with_wrong_shape_falls_back(): void {
-		Filters\expectApplied( 'embed_3d_models_conversion_color' )->once()->andReturn( 'red' );
+		Filters\expectApplied( 'pratiks_3d_model_embedder_conversion_color' )->once()->andReturn( 'red' );
 		$dest = Fixtures::path( 'glb' );
 		( new Converter() )->convert( Fixtures::file( 'stl', Fixtures::binary_stl( array( self::TRIANGLE ) ) ), 'stl', $dest );
 		$this->assertEquals( array( 0.42, 0.45, 0.5, 1.0 ), Fixtures::read_glb( $dest )['json']['materials'][0]['pbrMetallicRoughness']['baseColorFactor'] );

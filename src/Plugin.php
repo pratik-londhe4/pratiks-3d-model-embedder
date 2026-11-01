@@ -50,7 +50,7 @@ final class Plugin {
 		$models    = new Media\Models( new Media\Converter() );
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			\WP_CLI::add_command( 'embed-3d-models', new Cli\Command( $models, $validator ) );
+			\WP_CLI::add_command( 'pratiks-3d-model-embedder', new Cli\Command( $models, $validator ) );
 		}
 
 		return array(

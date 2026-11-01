@@ -29,7 +29,7 @@ async function upload( request, name, buffer, mimeType = 'application/octet-stre
  * @return {Object|null} Metadata.
  */
 function pluginMeta( id ) {
-	return JSON.parse( wpEval( `$m = wp_get_attachment_metadata( ${ Number( id ) } ); echo wp_json_encode( $m['embed_3d_models'] ?? null );` ) );
+	return JSON.parse( wpEval( `$m = wp_get_attachment_metadata( ${ Number( id ) } ); echo wp_json_encode( $m['pratiks_3d_model_embedder'] ?? null );` ) );
 }
 
 /**
@@ -125,16 +125,16 @@ test.describe( 'Block', () => {
 		await openEditor( page, postId );
 
 		await page.evaluate( () => {
-			const block = window.wp.blocks.createBlock( 'embed-3d-models/model' );
+			const block = window.wp.blocks.createBlock( 'pratiks-3d-model-embedder/model' );
 			window.wp.data.dispatch( 'core/block-editor' ).insertBlocks( block );
 		} );
 
 		const canvas = page.frameLocator( 'iframe[name="editor-canvas"]' );
-		const placeholder = canvas.locator( '.wp-block-embed-3d-models-model .components-placeholder' );
+		const placeholder = canvas.locator( '.wp-block-pratiks-3d-model-embedder-model .components-placeholder' );
 		await expect( placeholder ).toContainText( 'STL and OBJ files are converted' );
 		await placeholder.locator( 'input[type="file"]' ).setInputFiles( { name: 'gear.stl', mimeType: 'application/vnd.ms-pki.stl', buffer: binaryStl( 8 ) } );
 
-		const viewer = canvas.locator( '.wp-block-embed-3d-models-model model-viewer' );
+		const viewer = canvas.locator( '.wp-block-pratiks-3d-model-embedder-model model-viewer' );
 		await expect( viewer ).toHaveAttribute( 'src', /gear(-\d+)?-stl\.glb$/, { timeout: 30000 } );
 		// The model renders in the editor canvas, not just the element.
 		await expect.poll( () => viewer.evaluate( ( node ) => node.loaded ), { timeout: 30000 } ).toBe( true );
@@ -145,7 +145,7 @@ test.describe( 'Block', () => {
 		await page.waitForFunction( () => ! window.wp.data.select( 'core/editor' ).isSavingPost() && ! window.wp.data.select( 'core/editor' ).isEditedPostDirty() );
 
 		const content = wp( 'post', 'get', String( postId ), '--field=post_content' );
-		expect( content ).toMatch( /<!-- wp:embed-3d-models\/model \{"id":\d+,"alt":"A small gear"/ );
+		expect( content ).toMatch( /<!-- wp:pratiks-3d-model-embedder\/model \{"id":\d+,"alt":"A small gear"/ );
 
 		wp( 'post', 'update', String( postId ), '--post_status=publish' );
 		// The viewer and its decoders must come from this site, never a CDN.
@@ -164,7 +164,7 @@ test.describe( 'Block', () => {
 		await expect( page.locator( 'script[src*="model-viewer-umd.min.js"]' ) ).toHaveCount( 1 );
 		// The decoders point at the plugin's own copies, not Google's CDN.
 		const draco = await page.evaluate( () => window.ModelViewerElement.ModelViewerElement.dracoDecoderLocation );
-		expect( draco ).toContain( '/wp-content/plugins/embed-3d-models/assets/vendor/draco/' );
+		expect( draco ).toContain( '/wp-content/plugins/pratiks-3d-model-embedder/assets/vendor/draco/' );
 		await front.scrollIntoViewIfNeeded();
 		await page.waitForFunction( () => document.querySelector( 'model-viewer' ).loaded, null, { timeout: 30000 } );
 		expect( external ).toEqual( [] );
@@ -180,7 +180,7 @@ test.describe( 'Block', () => {
 
 	test( '"Use current view as poster" saves an image and makes it the model thumbnail', async ( { page, request } ) => {
 		const { body: model } = await upload( request, 'poster-me.glb', glb() );
-		const postId = Number( wp( 'post', 'create', '--post_title=Poster', '--post_status=draft', `--post_content=<!-- wp:embed-3d-models/model {"id":${ model.id },"alt":"Triangle"} /-->`, '--porcelain' ) );
+		const postId = Number( wp( 'post', 'create', '--post_title=Poster', '--post_status=draft', `--post_content=<!-- wp:pratiks-3d-model-embedder/model {"id":${ model.id },"alt":"Triangle"} /-->`, '--porcelain' ) );
 		await openEditor( page, postId );
 
 		const canvas = page.frameLocator( 'iframe[name="editor-canvas"]' );
@@ -207,13 +207,13 @@ test.describe( 'Block', () => {
 		await expect( viewer ).toHaveAttribute( 'poster', /poster/ );
 	} );
 
-	test( 'the embed3dModels.viewerAttributes JS filter changes the preview', async ( { page, request } ) => {
+	test( 'the pratiks3dModelEmbedder.viewerAttributes JS filter changes the preview', async ( { page, request } ) => {
 		const { body: model } = await upload( request, 'filtered.glb', glb() );
-		const postId = Number( wp( 'post', 'create', '--post_title=Filter', '--post_status=draft', `--post_content=<!-- wp:embed-3d-models/model {"id":${ model.id }} /-->`, '--porcelain' ) );
+		const postId = Number( wp( 'post', 'create', '--post_title=Filter', '--post_status=draft', `--post_content=<!-- wp:pratiks-3d-model-embedder/model {"id":${ model.id }} /-->`, '--porcelain' ) );
 
 		await page.addInitScript( () => {
 			document.addEventListener( 'DOMContentLoaded', () => {
-				window.wp.hooks.addFilter( 'embed3dModels.viewerAttributes', 'e2e', ( attrs ) => ( { ...attrs, 'data-e2e': 'filtered' } ) );
+				window.wp.hooks.addFilter( 'pratiks3dModelEmbedder.viewerAttributes', 'e2e', ( attrs ) => ( { ...attrs, 'data-e2e': 'filtered' } ) );
 			} );
 		} );
 		await openEditor( page, postId );
@@ -223,7 +223,7 @@ test.describe( 'Block', () => {
 
 	test( 'the block asks for alt text when it is missing', async ( { page, request } ) => {
 		const { body: model } = await upload( request, 'no-alt.glb', glb() );
-		const postId = Number( wp( 'post', 'create', '--post_title=No alt', '--post_status=draft', `--post_content=<!-- wp:embed-3d-models/model {"id":${ model.id }} /-->`, '--porcelain' ) );
+		const postId = Number( wp( 'post', 'create', '--post_title=No alt', '--post_status=draft', `--post_content=<!-- wp:pratiks-3d-model-embedder/model {"id":${ model.id }} /-->`, '--porcelain' ) );
 		await openEditor( page, postId );
 
 		await expect( page.frameLocator( 'iframe[name="editor-canvas"]' ).locator( '.e3dm-editor-hint' ) ).toContainText( 'Add alternative text' );
@@ -247,7 +247,7 @@ test.describe( 'Cleanup', () => {
 		const meta = pluginMeta( body.id );
 
 		// Runs uninstall.php directly: `wp plugin uninstall` would delete the mounted plugin folder.
-		wpEval( "define( 'WP_UNINSTALL_PLUGIN', 'embed-3d-models/embed-3d-models.php' ); include WP_PLUGIN_DIR . '/embed-3d-models/uninstall.php';" );
+		wpEval( "define( 'WP_UNINSTALL_PLUGIN', 'pratiks-3d-model-embedder/pratiks-3d-model-embedder.php' ); include WP_PLUGIN_DIR . '/pratiks-3d-model-embedder/uninstall.php';" );
 
 		expect( siblingExists( body.id, meta.glb ) ).toBe( false );
 		expect( pluginMeta( body.id ) ).toBeNull();
@@ -256,20 +256,20 @@ test.describe( 'Cleanup', () => {
 } );
 
 test.describe( 'WP-CLI, REST, abilities and Site Health', () => {
-	test( 'wp embed-3d-models list, get, convert, check and formats', async ( { request } ) => {
+	test( 'wp pratiks-3d-model-embedder list, get, convert, check and formats', async ( { request } ) => {
 		const { body } = await upload( request, 'cli.stl', binaryStl( 3 ) );
 
-		const formats = JSON.parse( wp( 'embed-3d-models', 'formats', '--format=json' ) );
+		const formats = JSON.parse( wp( 'pratiks-3d-model-embedder', 'formats', '--format=json' ) );
 		expect( formats.map( ( f ) => f.extension ) ).toEqual( [ 'glb', 'gltf', 'usdz', 'stl', 'obj' ] );
 
-		const list = JSON.parse( wp( 'embed-3d-models', 'list', '--format=json', '--type=stl' ) );
+		const list = JSON.parse( wp( 'pratiks-3d-model-embedder', 'list', '--format=json', '--type=stl' ) );
 		expect( list.find( ( row ) => row.id === body.id ) ).toMatchObject( { status: 'converted', triangles: 3 } );
 
-		expect( JSON.parse( wp( 'embed-3d-models', 'get', String( body.id ), '--format=json' ) )[ 0 ].format ).toBe( 'stl' );
-		expect( wp( 'embed-3d-models', 'convert', String( body.id ) ) ).toContain( '3 triangles' );
+		expect( JSON.parse( wp( 'pratiks-3d-model-embedder', 'get', String( body.id ), '--format=json' ) )[ 0 ].format ).toBe( 'stl' );
+		expect( wp( 'pratiks-3d-model-embedder', 'convert', String( body.id ) ) ).toContain( '3 triangles' );
 
 		wpEval( "file_put_contents( '/tmp/e2e-bad.glb', 'nope' );" );
-		expect( () => wp( 'embed-3d-models', 'check', '/tmp/e2e-bad.glb' ) ).toThrow( /not a valid GLB/ );
+		expect( () => wp( 'pratiks-3d-model-embedder', 'check', '/tmp/e2e-bad.glb' ) ).toThrow( /not a valid GLB/ );
 	} );
 
 	test( 'REST: an author cannot set the poster of a model they cannot edit', async ( { browser, request } ) => {
@@ -281,7 +281,7 @@ test.describe( 'WP-CLI, REST, abilities and Site Health', () => {
 		}
 		const { context, page } = await logInAs( browser, 'e2e_author2', 'password' );
 		const nonce = ( await ( await page.request.get( '/wp-admin/admin-ajax.php?action=rest-nonce' ) ).text() ).trim();
-		const response = await page.request.post( `/index.php?rest_route=${ encodeURIComponent( `/embed-3d-models/v1/models/${ model.id }/poster` ) }`, {
+		const response = await page.request.post( `/index.php?rest_route=${ encodeURIComponent( `/pratiks-3d-model-embedder/v1/models/${ model.id }/poster` ) }`, {
 			headers: { 'X-WP-Nonce': nonce },
 			data: { poster_id: 0 },
 		} );
@@ -294,7 +294,7 @@ test.describe( 'WP-CLI, REST, abilities and Site Health', () => {
 		test.skip( '1' !== wpEval( "echo (int) function_exists( 'wp_register_ability' );" ), 'The Abilities API needs WordPress 6.9.' );
 		const { body: model } = await upload( request, 'ability.glb', glb() );
 
-		const { status, body } = await rest( 'GET', '/wp-abilities/v1/abilities/embed-3d-models/list-models/run?input[format]=glb' );
+		const { status, body } = await rest( 'GET', '/wp-abilities/v1/abilities/pratiks-3d-model-embedder/list-models/run?input[format]=glb' );
 
 		expect( status ).toBe( 200 );
 		expect( body.map( ( m ) => m.id ) ).toContain( model.id );
@@ -302,7 +302,7 @@ test.describe( 'WP-CLI, REST, abilities and Site Health', () => {
 
 	test( 'Site Health reports that 3D models can be uploaded', async () => {
 		const status = wpEval(
-			"wp_set_current_user( 1 ); $tests = apply_filters( 'site_status_tests', array() ); $result = call_user_func( $tests['direct']['embed_3d_models_upload']['test'] ); echo $result['status'];"
+			"wp_set_current_user( 1 ); $tests = apply_filters( 'site_status_tests', array() ); $result = call_user_func( $tests['direct']['pratiks_3d_model_embedder_upload']['test'] ); echo $result['status'];"
 		);
 
 		expect( status ).toBe( 'good' );

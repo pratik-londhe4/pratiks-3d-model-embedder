@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Embed 3D Models">
-	<description>WordPress coding standards for Embed 3D Models.</description>
+<ruleset name="Pratiks 3D Model Embedder">
+	<description>WordPress coding standards for Pratiks 3D Model Embedder.</description>
 
 	<file>.</file>
 	<exclude-pattern>/vendor/*</exclude-pattern>
@@ -24,7 +24,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="embed-3d-models"/>
+				<element value="pratiks-3d-model-embedder"/>
 			</property>
 		</properties>
 	</rule>
@@ -33,7 +33,7 @@
 		<properties>
 			<property name="prefixes" type="array">
 				<element value="PratikLondhe\Embed3DModels"/>
-				<element value="embed_3d_models"/>
+				<element value="pratiks_3d_model_embedder"/>
 			</property>
 		</properties>
 	</rule>

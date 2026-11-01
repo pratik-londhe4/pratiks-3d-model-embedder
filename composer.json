@@ -1,5 +1,5 @@
 {
-  "name": "pratiklondhe/embed-3d-models",
+  "name": "pratiklondhe/pratiks-3d-model-embedder",
   "description": "Upload 3D models (GLB, glTF, USDZ, STL, OBJ) and show them with a block.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",

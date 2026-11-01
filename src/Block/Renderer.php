@@ -59,11 +59,11 @@ final class Renderer {
 		 * @param array          $attributes Block attributes.
 		 * @param \WP_Block|null $block      Block instance.
 		 */
-		$viewer = (array) apply_filters( 'embed_3d_models_viewer_attributes', $viewer, $attributes, $block );
+		$viewer = (array) apply_filters( 'pratiks_3d_model_embedder_viewer_attributes', $viewer, $attributes, $block );
 
-		$inner = '<p class="e3dm-error-message" hidden>' . esc_html( Formats::message( 'load_failed', __( 'This 3D model could not be loaded.', 'embed-3d-models' ) ) ) . '</p>';
+		$inner = '<p class="e3dm-error-message" hidden>' . esc_html( Formats::message( 'load_failed', __( 'This 3D model could not be loaded.', 'pratiks-3d-model-embedder' ) ) ) . '</p>';
 		if ( 'manual' === ( $viewer['reveal'] ?? '' ) ) {
-			$inner .= '<button type="button" class="e3dm-load">' . esc_html__( 'Load 3D model', 'embed-3d-models' ) . '</button>';
+			$inner .= '<button type="button" class="e3dm-load">' . esc_html__( 'Load 3D model', 'pratiks-3d-model-embedder' ) . '</button>';
 		}
 
 		$caption = trim( (string) ( $attributes['caption'] ?? '' ) );
@@ -81,7 +81,7 @@ final class Renderer {
 		 * @param string $html       Block HTML.
 		 * @param array  $attributes Block attributes.
 		 */
-		return (string) apply_filters( 'embed_3d_models_render', $html, $attributes );
+		return (string) apply_filters( 'pratiks_3d_model_embedder_render', $html, $attributes );
 	}
 
 	/**

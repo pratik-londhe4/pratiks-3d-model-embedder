@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Block implements Service {
 
-	public const VIEWER_HANDLE = 'embed-3d-models-viewer';
+	public const VIEWER_HANDLE = 'pratiks-3d-model-embedder-viewer';
 
 	/**
 	 * Front-end markup.
@@ -59,13 +59,13 @@ final class Block implements Service {
 		wp_register_script( self::VIEWER_HANDLE, $url . 'vendor/model-viewer/model-viewer-umd.min.js', array(), '4.4.0', array( 'in_footer' => true ) );
 		wp_add_inline_script( self::VIEWER_HANDLE, $this->decoder_script(), 'after' );
 
-		wp_register_script( 'embed-3d-models-view', $url . 'js/view.js', array( self::VIEWER_HANDLE ), VERSION, array( 'in_footer' => true ) );
-		wp_register_script( 'embed-3d-models-attributes', $url . 'js/attributes.js', array(), VERSION, true );
+		wp_register_script( 'pratiks-3d-model-embedder-view', $url . 'js/view.js', array( self::VIEWER_HANDLE ), VERSION, array( 'in_footer' => true ) );
+		wp_register_script( 'pratiks-3d-model-embedder-attributes', $url . 'js/attributes.js', array(), VERSION, true );
 		wp_register_script(
-			'embed-3d-models-editor',
+			'pratiks-3d-model-embedder-editor',
 			$url . 'js/block.js',
 			array(
-				'embed-3d-models-attributes',
+				'pratiks-3d-model-embedder-attributes',
 				'wp-api-fetch',
 				'wp-block-editor',
 				'wp-blocks',
@@ -80,10 +80,10 @@ final class Block implements Service {
 			VERSION,
 			true
 		);
-		wp_add_inline_script( 'embed-3d-models-editor', 'window.embed3dModelsEditor = ' . wp_json_encode( $this->editor_settings() ) . ';', 'before' );
-		wp_set_script_translations( 'embed-3d-models-editor', 'embed-3d-models' );
+		wp_add_inline_script( 'pratiks-3d-model-embedder-editor', 'window.pratiks3dModelEmbedderEditor = ' . wp_json_encode( $this->editor_settings() ) . ';', 'before' );
+		wp_set_script_translations( 'pratiks-3d-model-embedder-editor', 'pratiks-3d-model-embedder' );
 
-		wp_register_style( 'embed-3d-models', $url . 'css/block.css', array(), VERSION );
+		wp_register_style( 'pratiks-3d-model-embedder', $url . 'css/block.css', array(), VERSION );
 
 		register_block_type(
 			dirname( PLUGIN_FILE ) . '/block',
@@ -119,7 +119,7 @@ final class Block implements Service {
 		 *
 		 * @param array $locations dracoDecoderLocation, ktx2TranscoderLocation, meshoptDecoderLocation.
 		 */
-		$locations = array_merge( $defaults, array_intersect_key( (array) apply_filters( 'embed_3d_models_decoder_locations', $defaults ), $defaults ) );
+		$locations = array_merge( $defaults, array_intersect_key( (array) apply_filters( 'pratiks_3d_model_embedder_decoder_locations', $defaults ), $defaults ) );
 
 		return array_map(
 			static function ( $location ): string {

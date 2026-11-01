@@ -13,11 +13,11 @@ use PratikLondhe\Embed3DModels\Service;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * `embed-3d-models/v1/models/<id>`: read a model, set its poster, convert it again.
+ * `pratiks-3d-model-embedder/v1/models/<id>`: read a model, set its poster, convert it again.
  */
 final class ModelsController implements Service {
 
-	public const NAMESPACE = 'embed-3d-models/v1';
+	public const NAMESPACE = 'pratiks-3d-model-embedder/v1';
 
 	/**
 	 * Model attachments.
@@ -112,7 +112,7 @@ final class ModelsController implements Service {
 	public function get( $request ) {
 		$info = $this->models->info( (int) $request->get_param( 'id' ) );
 		if ( null === $info ) {
-			return new \WP_Error( 'embed_3d_models_not_a_model', __( 'That attachment is not a 3D model.', 'embed-3d-models' ), array( 'status' => 404 ) );
+			return new \WP_Error( 'pratiks_3d_model_embedder_not_a_model', __( 'That attachment is not a 3D model.', 'pratiks-3d-model-embedder' ), array( 'status' => 404 ) );
 		}
 
 		return new \WP_REST_Response( $info );
@@ -127,7 +127,7 @@ final class ModelsController implements Service {
 	public function set_poster( $request ) {
 		$poster_id = (int) $request->get_param( 'poster_id' );
 		if ( $poster_id > 0 && ! current_user_can( 'edit_post', $poster_id ) ) {
-			return new \WP_Error( 'rest_forbidden', __( 'You cannot use that image.', 'embed-3d-models' ), array( 'status' => 403 ) );
+			return new \WP_Error( 'rest_forbidden', __( 'You cannot use that image.', 'pratiks-3d-model-embedder' ), array( 'status' => 403 ) );
 		}
 
 		$result = $this->models->set_poster( (int) $request->get_param( 'id' ), $poster_id );

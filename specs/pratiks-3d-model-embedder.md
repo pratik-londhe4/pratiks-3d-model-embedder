@@ -1,6 +1,6 @@
-# Embed 3D Models (`embed-3d-models`)
+# Pratiks 3D Model Embedder (`pratiks-3d-model-embedder`)
 
-Namespace `PratikLondhe\Embed3DModels`, prefix `embed_3d_models`, CSS prefix `e3dm-`, JS hooks namespace `embed3dModels`. E2E port 8911.
+Namespace `PratikLondhe\Embed3DModels`, prefix `pratiks_3d_model_embedder`, CSS prefix `e3dm-`, JS hooks namespace `pratiks3dModelEmbedder`. E2E port 8911.
 Requires at least 6.6 (block API v3, editor iframe) and PHP 7.4.
 
 ## Problem
@@ -27,28 +27,28 @@ What this plugin does differently:
    - OBJ: text with at least one `v` line and one `f` line, no NUL bytes.
    - Text formats (glTF, OBJ, ASCII STL) containing `<?php`, `<?=` or `<script` are refused.
    - Media Library gets a "3D models" type filter and a 3D file icon.
-2. **Conversion.** On `wp_generate_attachment_metadata`, STL and OBJ files are converted to a GLB beside the original (`name.stl` to `name-stl.glb`), streaming triangles to a temp file with O(1) memory for STL and 12 bytes per vertex for OBJ. Flat normals from the geometry (STL normals are often wrong); OBJ `vn` normals are used when present. STL is Z-up and in millimetres, so it is rotated to Y-up and scaled by 0.001 (both filterable per format). One PBR material in a neutral grey (filterable). Files over 64 MB (filterable) are not converted at upload; WP-CLI can convert them with `--ignore-limit`. The result, triangle count and any error are stored in the attachment metadata under `embed_3d_models`. Deleting the attachment deletes the derived GLB.
-3. **Block `embed-3d-models/model`.** Dynamic block (PHP render), category media. Placeholder: upload, Media Library (only 3D types) or URL. Inspector: alt text (required, warned when empty), height, background colour, auto-rotate, camera controls, zoom, AR (off by default, with an optional USDZ file for iPhone), exposure, shadow, loading (lazy, eager), "click to load" with poster, animation autoplay, poster image, "Use current view as poster", "Save current camera angle", "Reset camera". Caption. Editor preview is the real viewer. Shows triangle count and conversion state; explains conversion failures.
-4. **Posters as thumbnails.** `POST /embed-3d-models/v1/models/<id>/poster` (`edit_post` on the model) stores the poster as the model attachment's `_thumbnail_id`; the Media Library grid shows it.
+2. **Conversion.** On `wp_generate_attachment_metadata`, STL and OBJ files are converted to a GLB beside the original (`name.stl` to `name-stl.glb`), streaming triangles to a temp file with O(1) memory for STL and 12 bytes per vertex for OBJ. Flat normals from the geometry (STL normals are often wrong); OBJ `vn` normals are used when present. STL is Z-up and in millimetres, so it is rotated to Y-up and scaled by 0.001 (both filterable per format). One PBR material in a neutral grey (filterable). Files over 64 MB (filterable) are not converted at upload; WP-CLI can convert them with `--ignore-limit`. The result, triangle count and any error are stored in the attachment metadata under `pratiks_3d_model_embedder`. Deleting the attachment deletes the derived GLB.
+3. **Block `pratiks-3d-model-embedder/model`.** Dynamic block (PHP render), category media. Placeholder: upload, Media Library (only 3D types) or URL. Inspector: alt text (required, warned when empty), height, background colour, auto-rotate, camera controls, zoom, AR (off by default, with an optional USDZ file for iPhone), exposure, shadow, loading (lazy, eager), "click to load" with poster, animation autoplay, poster image, "Use current view as poster", "Save current camera angle", "Reset camera". Caption. Editor preview is the real viewer. Shows triangle count and conversion state; explains conversion failures.
+4. **Posters as thumbnails.** `POST /pratiks-3d-model-embedder/v1/models/<id>/poster` (`edit_post` on the model) stores the poster as the model attachment's `_thumbnail_id`; the Media Library grid shows it.
 5. **Assets.** `<model-viewer>` 4.4.0 UMD, Draco, KTX2 and meshopt decoders vendored under `assets/vendor/`, decoder locations pointed at them. Loaded on the frontend only when the block renders; loaded in the editor (iframe and non-iframe) through `enqueue_block_assets`.
 6. **Site Health.** Warns when another plugin removed the 3D types from uploads, when a USDZ file is served with the wrong Content-Type (iPhone AR then fails), and when conversions failed.
 7. **Edge cases.** Multisite: per site, network upload file types (`upload_filetypes`) must include the extensions; Site Health says so. Large files: streamed conversion, size cap. External URLs: work if the host sends CORS headers; the editor says so on load failure. Older WordPress: abilities guarded by `function_exists`.
 8. **Privacy.** No personal data stored. AR on Android hands the model URL to Google's Scene Viewer app; documented under External services. No other external calls.
-9. **Uninstall.** Deletes every derived GLB and the `embed_3d_models` attachment metadata key. Original uploads and posters stay (they are the user's media).
+9. **Uninstall.** Deletes every derived GLB and the `pratiks_3d_model_embedder` attachment metadata key. Original uploads and posters stay (they are the user's media).
 
 ## Hooks
 
-Filters: `embed_3d_models_upload_capability`, `embed_3d_models_formats`, `embed_3d_models_validate_file`, `embed_3d_models_allow_external_resources`, `embed_3d_models_max_convert_bytes`, `embed_3d_models_conversion_scale`, `embed_3d_models_conversion_up_axis`, `embed_3d_models_conversion_color`, `embed_3d_models_viewer_attributes`, `embed_3d_models_render`, `embed_3d_models_decoder_locations`, `embed_3d_models_message`.
-Actions: `embed_3d_models_upload_rejected`, `embed_3d_models_converted`, `embed_3d_models_conversion_failed`, `embed_3d_models_poster_set`, `embed_3d_models_derived_deleted`.
-JS (`wp.hooks`, namespace `embed3dModels`): filters `embed3dModels.viewerAttributes`, `embed3dModels.allowedTypes`, `embed3dModels.posterOptions`; actions `embed3dModels.posterCreated`, `embed3dModels.modelSelected`.
+Filters: `pratiks_3d_model_embedder_upload_capability`, `pratiks_3d_model_embedder_formats`, `pratiks_3d_model_embedder_validate_file`, `pratiks_3d_model_embedder_allow_external_resources`, `pratiks_3d_model_embedder_max_convert_bytes`, `pratiks_3d_model_embedder_conversion_scale`, `pratiks_3d_model_embedder_conversion_up_axis`, `pratiks_3d_model_embedder_conversion_color`, `pratiks_3d_model_embedder_viewer_attributes`, `pratiks_3d_model_embedder_render`, `pratiks_3d_model_embedder_decoder_locations`, `pratiks_3d_model_embedder_message`.
+Actions: `pratiks_3d_model_embedder_upload_rejected`, `pratiks_3d_model_embedder_converted`, `pratiks_3d_model_embedder_conversion_failed`, `pratiks_3d_model_embedder_poster_set`, `pratiks_3d_model_embedder_derived_deleted`.
+JS (`wp.hooks`, namespace `pratiks3dModelEmbedder`): filters `pratiks3dModelEmbedder.viewerAttributes`, `pratiks3dModelEmbedder.allowedTypes`, `pratiks3dModelEmbedder.posterOptions`; actions `pratiks3dModelEmbedder.posterCreated`, `pratiks3dModelEmbedder.modelSelected`.
 
 ## Abilities
 
-`embed-3d-models/list-models` (readonly), `embed-3d-models/get-model` (readonly), `embed-3d-models/convert-model` (idempotent), `embed-3d-models/set-model-poster` (idempotent).
+`pratiks-3d-model-embedder/list-models` (readonly), `pratiks-3d-model-embedder/get-model` (readonly), `pratiks-3d-model-embedder/convert-model` (idempotent), `pratiks-3d-model-embedder/set-model-poster` (idempotent).
 
 ## WP-CLI
 
-`wp embed-3d-models list [--format=]`, `get <id> [--format=]`, `convert <id>... [--ignore-limit]`, `set-poster <model-id> <image-id>`, `check <file>` (validate a local file), `formats [--format=]`.
+`wp pratiks-3d-model-embedder list [--format=]`, `get <id> [--format=]`, `convert <id>... [--ignore-limit]`, `set-poster <model-id> <image-id>`, `check <file>` (validate a local file), `formats [--format=]`.
 
 ## E2E ideas
 
@@ -60,7 +60,7 @@ JS (`wp.hooks`, namespace `embed3dModels`): filters `embed3dModels.viewerAttribu
 - A page without the block does not load model-viewer.
 - "Use current view as poster": an image attachment is created and set as the model's `_thumbnail_id`.
 - Delete the STL attachment: derived GLB is gone.
-- `wp.hooks` filter `embed3dModels.viewerAttributes` changes the editor preview.
+- `wp.hooks` filter `pratiks3dModelEmbedder.viewerAttributes` changes the editor preview.
 - Runs on 6.6 / PHP 7.4, 6.9 and latest.
 
 ## Hard parts

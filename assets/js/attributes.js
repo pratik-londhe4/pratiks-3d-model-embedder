@@ -8,7 +8,7 @@
 	if ( typeof module === 'object' && module.exports ) {
 		module.exports = factory();
 	} else {
-		root.embed3dModelsAttributes = factory();
+		root.pratiks3dModelEmbedderAttributes = factory();
 	}
 } )( typeof self !== 'undefined' ? self : this, function () {
 	'use strict';
